@@ -1,24 +1,30 @@
 import React, {useState, useRef, useMemo, useEffect} from "react";
 import TinderCard from "react-tinder-card";
+import "./MainPage.css";
 
 // Reference: https://www.npmjs.com/package/react-tinder-card - Code Demo and Examples
 
 const db = [
   {
-    name: 'Chicken parmesan'
+    name: 'Chicken parmesan',
+    image: 'files/Chickenparmesan.jpeg'
   },
   {
-    name: 'Lasagna'
+    name: 'Lasagna',
+    image: 'files/Lasagna.jpg'
   },
   {
-    name: 'Fish Tacos'
+    name: 'Fish Tacos',
+    image: 'files/Fishtacos.jpg'
   },
   {
-    name: 'Lava Cake'
+    name: 'Lava Cake',
+    image: 'files/Lavacake.jpeg'
 
   },
   {
-    name: 'Broccoli Cheddar Soup'
+    name: 'Broccoli Cheddar Soup',
+    image: 'files/BroccoliSoup.jpeg'
 
   }
 ]
@@ -68,12 +74,16 @@ function MainPage() {
   }
 
   return(
-    <div>
+    <div className = 'background'>
+      <h1 className = 'maintitle'> Tinda Swipe </h1>
       <div className='recipeContainer'>
         {currentIndex >= 0 && (
           <TinderCard ref={childRefs[currentIndex]} className='swipe' key={recipes[currentIndex].name} onSwipe={(dir) => swiped(dir, recipes[currentIndex], currentIndex)} onCardLeftScreen={() => outOfFrame(recipes[currentIndex].name, currentIndex)}>
             <div className='card'>
               <h3>{recipes[currentIndex].name}</h3>
+              {recipes[currentIndex].image && (
+                <img src={recipes[currentIndex].image} alt={recipes[currentIndex].name} />
+              )}
             </div>
           </TinderCard>
         )}

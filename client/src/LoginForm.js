@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
+import "./LoginForm.css";
 
 function LoginForm() {
     const navigate = useNavigate(); // Replace useHistory with useNavigate
