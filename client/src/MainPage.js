@@ -1,5 +1,7 @@
 import React, {useState, useRef, useMemo, useEffect} from "react";
 import TinderCard from "react-tinder-card";
+import Card from "react-bootstrap/Card";
+import Button from 'react-bootstrap/Button';
 import "./MainPage.css";
 
 // Reference: https://www.npmjs.com/package/react-tinder-card - Code Demo and Examples
@@ -7,24 +9,24 @@ import "./MainPage.css";
 const db = [
   {
     name: 'Chicken parmesan',
-    image: 'files/Chickenparmesan.jpeg'
+    image: './files/Chickenparmesan.jpeg'
   },
   {
     name: 'Lasagna',
-    image: 'files/Lasagna.jpg'
+    image: './files/Lasagna.jpg'
   },
   {
     name: 'Fish Tacos',
-    image: 'files/Fishtacos.jpg'
+    image: './files/Fishtacos.jpg'
   },
   {
     name: 'Lava Cake',
-    image: 'files/Lavacake.jpeg'
+    image: './files/Lavacake.jpeg'
 
   },
   {
     name: 'Broccoli Cheddar Soup',
-    image: 'files/BroccoliSoup.jpeg'
+    image: './files/BroccoliSoup.jpeg'
 
   }
 ]
@@ -74,24 +76,32 @@ function MainPage() {
   }
 
   return(
-    <div className = 'background'>
+    <div className = 'background' style={{ textAlign:'center', backgroundColor: 'rgb(230, 217, 175)'}}>
       <h1 className = 'maintitle'> Tinda Swipe </h1>
       <div className='recipeContainer'>
         {currentIndex >= 0 && (
           <TinderCard ref={childRefs[currentIndex]} className='swipe' key={recipes[currentIndex].name} onSwipe={(dir) => swiped(dir, recipes[currentIndex], currentIndex)} onCardLeftScreen={() => outOfFrame(recipes[currentIndex].name, currentIndex)}>
-            <div className='card'>
-              <h3>{recipes[currentIndex].name}</h3>
+            <Card style={{width: "18 rem"}}>
+              <Card.Header>{recipes[currentIndex].name}</Card.Header>
               {recipes[currentIndex].image && (
-                <img src={recipes[currentIndex].image} alt={recipes[currentIndex].name} />
+                <Card.Img variant="top" src={recipes[currentIndex].image} width={300} height={300} alt={recipes[currentIndex].name} />
+               
               )}
-            </div>
+              <div className="buttons" width={600}>
+            
+              
+              <Button size="lg" className='button' onClick={() => swipe('left')}> Swipe left! </Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button size="lg" className='button' onClick={() => swipe('right')}> Swipe right! </Button>
+              </div>
+            </Card>
           </TinderCard>
         )}
+       
       </div>
-      <div className = 'buttons'>
-        <button onClick={() => swipe('left')}>Swipe left!</button>
-        <button onClick={() => swipe('right')}>Swipe right!</button>
-      </div>
+      
+
+      
       {previousDirection ? <h2 className='infoText'>You swiped {previousDirection}</h2> : <h2 className='infoText' />}
     </div>
   )
