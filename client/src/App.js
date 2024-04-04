@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import MainPage from "./MainPage";
 import LoginForm from "./LoginForm";
+import RecipeSearch from "./RecipeSearch";
 
 function App() {
   return (
