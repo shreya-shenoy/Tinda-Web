@@ -6,6 +6,7 @@ import "./MainPage.css";
 import Recipe from "./Recipe";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Popup from 'reactjs-popup';
+import Modal from 'react-bootstrap/Modal';
 
 // Reference: https://www.npmjs.com/package/react-tinder-card - Code Demo and Examples
 
@@ -21,6 +22,7 @@ function MainPage() {
   const[search, setSearch] = useState("");
   const[query, setQuery] = useState('chicken');
   const childRefs = useRef([]);
+  const [showModal, setShowModal] = useState(false);
   
 
   useEffect( () =>{
@@ -37,6 +39,8 @@ const getRecipes = async () => {
 
 
 
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
   const[previousDirection, setPreviousDirection] = useState();
   const[currentIndex, setCurrentIndex] = useState(0);
   const currentIndexRef = useRef(currentIndex)
@@ -75,27 +79,30 @@ const getRecipes = async () => {
     await childRefs[newIndex].current.restoreCard()
   }
 
-  const [open, setOpen] = useState(false);
-  const closeModal = () => setOpen(false);
   return(
     <div className = 'background' style={{ textAlign:'center'}}>
       <h1 className = 'maintitle'> Tinda Swipe </h1>
       <div>
-      <button type="button" className="filtertitle" onClick={() => setOpen(!open)}>
+      <button type="button" className="filtertitle" onClick={handleShowModal}>
       <img src='./files/Filtericons.png' width={50} height={50} alt="Your Image" />
         Filters
       </button>
-      <Popup open={open} closeOnDocumentClick onClose={() => setOpen(false)}>
-        <div className="modal">
-          <a className="close" onClick={closeModal}>
-            &times;
-          </a>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
-          omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
-          ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
-          doloribus. Odit, aut.
-        </div>
-      </Popup>
+      <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Filters</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
+            omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
+            ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
+            doloribus. Odit, aut.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </div>
     
       <div className='recipeContainer'>
@@ -103,6 +110,7 @@ const getRecipes = async () => {
           <TinderCard ref={childRefs[currentIndex]} className='swipe' key={recipes[currentIndex].recipe.label} onSwipe={(dir) => swiped(dir, recipes[currentIndex], currentIndex)} onCardLeftScreen={() => outOfFrame(recipes[currentIndex].recipe.label, currentIndex)}>
             <Card style={{width: "18 rem"}}>
               <Card.Header>{recipes[currentIndex].recipe.label}</Card.Header>
+              
               {recipes[currentIndex].recipe.image && (
                 <Card.Img variant="top" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
                
@@ -115,6 +123,11 @@ const getRecipes = async () => {
               <Button size="lg" className='button' onClick={() => swipe('right')}> Swipe right! </Button>
               </div>
             </Card>
+            <div className="popup-menu">
+                <Popup trigger={<Button variant="info">Open Popup Menu</Button>} position="right center">
+                  <div>This is a popup menu</div>
+                </Popup>
+              </div>
           </TinderCard>
         )}
        
