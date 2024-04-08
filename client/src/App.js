@@ -1,32 +1,31 @@
+<<<<<<< HEAD
 // inside src/App.js
 // Replace previous code with this.
 
 /*
+=======
+>>>>>>> swipePage
 import React from "react";
-import { useForm } from "react-hook-form";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+
+import MainPage from "./MainPage";
+import LoginForm from "./LoginForm";
+import RecipeSearch from "./RecipeSearch";
 
 function App() {
-	const { register, handleSubmit, formState: { errors } } = useForm();
-
-	const onSubmit = (data) => console.log(data);
-
-	return (
-		<>
-			<p className="title">Sign Up</p>
-
-			<form className="App" onSubmit={handleSubmit((data)=>onSubmit(data))}>
-				<label htmlFor = "email"> Email:</label>
-				<input type="email" {...register("email", { required: true })} />
-				{errors.email && <span style={{ color: "red" }}>
-					*Email* is mandatory </span>}
-        <label htmlFor = "email"> Password:</label>
-				<input type="password" {...register("password")} />
-				<input type={"submit"} style={{ backgroundColor: "#a1eafb" }} />
-			</form>
-		</>
-	);
+  return (
+    <Router>
+    <Routes>
+      <Route exact path="/" element={<LoginForm />} />
+      <Route path="/MainPage" element={<MainPage />} />
+    </Routes>
+    </Router>
+   
+  );
 }
+
+
 export default App;
 */
 
