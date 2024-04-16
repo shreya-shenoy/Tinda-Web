@@ -1,16 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./LoginForm.css";
 
 function LoginForm() {
     const navigate = useNavigate(); // Replace useHistory with useNavigate
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [error, setError] = useState("");
   
-    const onSubmit = (data) => {
-      console.log(data);
+    const onSubmit = async (data) => {
+      try{
+        const response = await axios.post("/login", data);
+        if(response.status == 200){
+          navigate("/MainPage");
+        }
+      }
+      catch (err){
+        setError("Invalid email or password");
+        console.error("Login error:", err);
+      }
       reset();
-      navigate("/MainPage"); // Use navigate instead of history.push
+      
     }
   
     return (

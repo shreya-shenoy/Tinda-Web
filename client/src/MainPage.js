@@ -1,4 +1,5 @@
 import React, {useState, useRef, useMemo, useEffect} from "react";
+
 import TinderCard from "react-tinder-card";
 import Card from "react-bootstrap/Card";
 import Button from 'react-bootstrap/Button';
@@ -7,6 +8,13 @@ import Recipe from "./Recipe";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Popup from 'reactjs-popup';
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import Picker from 'emoji-picker-react';
+import {CommentSection} from 'react-comments-section';
+import {Link} from 'react-router-dom';
+import ProfilePage from "./ProfilePage";
+import {useLocation} from "react-router-dom";
+import 'react-comments-section/dist/index.css'
 
 // Reference: https://www.npmjs.com/package/react-tinder-card - Code Demo and Examples
 
@@ -19,37 +27,119 @@ function MainPage() {
   const APP_KEY = '6424d94c5f215da7af69015836e315e8';
 
   const [recipes, setRecipes] = useState([])
+  const [childRefs, setChildRefs] = useState([]);
   const[search, setSearch] = useState("");
-  const[query, setQuery] = useState('chicken');
-  const childRefs = useRef([]);
+  const[query, setQuery] = useState('pasta');
+  //const childRefs = useRef([]);
+
+  
   const [showModal, setShowModal] = useState(false);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const [commentData] = useState([]);
+  const [recipeLength, setRecipeLength] = useState(0);
+  const location = useLocation();
+  const username = new URLSearchParams(location.search).get("username");
+  console.log("USERNAME", username);
+  
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const[currentIndex, setCurrentIndex] = useState(recipes.length > 0 ? recipes.length - 1 : 0);
+  console.log(recipes.length, "recipes", recipes)
+  const currentIndexRef = useRef(currentIndex);
+
+  const handleEmojiClick = (emoji) => {
+    const emojiString = emoji.unified;
+    setComment(comment + emojiString); // Update the comment state with the selected emoji'
+    console.log(emojiString);
+    setIsPickerOpen(false); // Close the emoji picker after selecting an emoji
+  };
+  
+  console.log("RECIPES LENGTH", recipes.length);
+  
   
 
-  useEffect( () =>{
-    getRecipes()
-  }, [])
+  const togglePicker = (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    setIsPickerOpen(!isPickerOpen); // Toggle the state to open/close the picker
+  };
+  
+  
+  useEffect(() => {
+    setChildRefs(Array(recipes.length).fill(null).map(() => React.createRef()));
+  }, [recipes]);
+  
+  useEffect( () =>{ 
+  const getRecipes = async () => {
+      const response = await fetch(`https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`)
+      const data = await response.json()
+      console.log(data);
+      setRecipes(data.hits)
+      //setCurrentIndex(data.hits.length - 1);
+      setRecipeLength(data.hits.length - 1);
+      //childRefs.current = data.hits.map(() => React.createRef());
+      //console.log("CHILD REFS", childRefs.current);
+      };
+ 
 
-const getRecipes = async () => {
-    const response = await fetch(`https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`)
-    const data = await response.json()
-    console.log(data);
-    setRecipes(data.hits)
-    childRefs.current = data.hits.map(() => React.createRef());
-}
 
+  getRecipes();
+}, []);
+  
+/*const childRefs = useMemo(
+  () => Array(recipeLength).fill(0).map((i) => React.createRef()), []
+   
+)*/
+console.log(childRefs);
 
+  
+  console.log("currentIndex", currentIndex)
 
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
   const[previousDirection, setPreviousDirection] = useState();
-  const[currentIndex, setCurrentIndex] = useState(0);
-  const currentIndexRef = useRef(currentIndex)
+  
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmitComment = () => {
+    const commentWithEmoji = comment + (chosenEmoji ? chosenEmoji.unified : ''); 
+    console.log("Comment submitted:", commentWithEmoji);
+    setComments([...comments, commentWithEmoji]); 
+    setComment(""); 
+    setChosenEmoji(null); 
+  };
+  const handleLikeRecipe = async (recipeName) => {
+    try {
+       // Function to get current user's ID
+      const response = await fetch("http://localhost:3001/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: username, // Assuming username is defined elsewhere in your code
+          recipeName: recipeName,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to like recipe");
+      }
+      // Optionally, you can update the UI to indicate that the recipe is liked
+    } catch (error) {
+      console.error("Error liking recipe:", error.message);
+      // Handle error
+    }
+  };
+  
   
   
 
   const updateCurrentIndex = (val) => {
     setCurrentIndex(val)
-    //currentIndexRef.current = val
+    currentIndexRef.current = val
   }
 
   const canSwipe = currentIndex >= 0
@@ -59,17 +149,31 @@ const getRecipes = async () => {
     console.log("Deleting: " + recipeDelete)
     setPreviousDirection(direction)
     updateCurrentIndex(index + 1)
+    if(direction == "right"){
+      handleLikeRecipe(recipeDelete.label);
+    }
+
   }
   const canGoBack = currentIndex < recipes.length - 1
   const outOfFrame = (recipe, index) => {
     console.log(recipe + ' left screen')
   }
-  const swipe = async (dir) => {
-    if(canSwipe && currentIndex >= 0 && currentIndex < recipes.length && childRefs.current[currentIndex] && childRefs.current[currentIndex].current) // index is within valid indices of db
+  /*const swipe = async (dir) => {
+    console.log("Swipe", childRefs);
+
+    if(canSwipe && currentIndex >= 0 && currentIndex < recipes.length && childRefs.current[currentIndex] && childRefs.current) // index is within valid indices of db
     {
       await childRefs.current[currentIndex].current.swipe(dir) // Swipe the card in this direction
       console.log("Swipe");
       updateCurrentIndex(dir === "left" ? currentIndex + 1 : currentIndex - 1);
+    }
+  }*/
+  const swipe = async (dir) => {
+    console.log("SWIPE: RECIPES LENGTH", recipes.length);
+    console.log("SWIPE: CHILD REFS", childRefs[currentIndex]);
+    if(canSwipe && currentIndex < recipes.length && childRefs[currentIndex] && childRefs[currentIndex].current) // index is within valid indices of db
+    {
+      await childRefs[currentIndex].current.swipe(dir); // Swipe the card in this direction
     }
   }
   const goBack = async () => {
@@ -78,13 +182,25 @@ const getRecipes = async () => {
     updateCurrentIndex(newIndex)
     await childRefs[newIndex].current.restoreCard()
   }
+  
 
   return(
+    
+
     <div className = 'background' style={{ textAlign:'center'}}>
+      <div className = "profileicon">
+      
+      <Link to="/ProfilePage">
+        <button>
+          <img src='./files/profileicon.png' width={50} height={50} alt="Profile Icon" />
+        </button>
+      </Link>
+       
+      </div>
       <h1 className = 'maintitle'> Tinda Swipe </h1>
       <div>
       <button type="button" className="filtertitle" onClick={handleShowModal}>
-      <img src='./files/Filtericons.png' width={50} height={50} alt="Your Image" />
+      <img src='./files/Filtericons.png' width={50} height={50} alt="Filter Icon" />
         Filters
       </button>
       <Modal show={showModal} onHide={handleCloseModal}>
@@ -106,8 +222,8 @@ const getRecipes = async () => {
     </div>
     
       <div className='recipeContainer'>
-        {currentIndex >= 0 && recipes.length > currentIndex && (
-          <TinderCard ref={childRefs[currentIndex]} className='swipe' key={recipes[currentIndex].recipe.label} onSwipe={(dir) => swiped(dir, recipes[currentIndex], currentIndex)} onCardLeftScreen={() => outOfFrame(recipes[currentIndex].recipe.label, currentIndex)}>
+        {currentIndex >= 0 && recipes.length > currentIndex &&  recipes.length > 0 && (
+          <TinderCard ref={childRefs[currentIndex]} className='swipe' key={recipes[currentIndex].recipe.label} onSwipe={(dir) => swiped(dir, recipes[currentIndex].recipe, currentIndex)} onCardLeftScreen={() => outOfFrame(recipes[currentIndex].recipe.label, currentIndex)}>
             <Card style={{width: "18 rem"}}>
               <Card.Header>{recipes[currentIndex].recipe.label}</Card.Header>
               
@@ -115,19 +231,99 @@ const getRecipes = async () => {
                 <Card.Img variant="top" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
                
               )}
-              <div className="buttons" width={600}>
-            
+              <div width={600}>
+                
               
-              <Button size="lg" className='button' onClick={() => swipe('left')}> Swipe left! </Button>
+              <Button size="lg" className='swipeleftbutton' onClick={() => swipe('left')}>
+              <img src='./files/x.png' width={65} height={60} alt="X Icon" />
+              </Button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button size="lg" className='button' onClick={() => swipe('right')}> Swipe right! </Button>
+              <Button size="lg" className='swiperightbutton' onClick={() => swipe('right')}> 
+              <img src='./files/heart.png' width={60} height={60} alt="Heart Icon" />
+              </Button>
               </div>
             </Card>
-            <div className="popup-menu">
-                <Popup trigger={<Button variant="info">Open Popup Menu</Button>} position="right center">
-                  <div>This is a popup menu</div>
-                </Popup>
-              </div>
+            <button type="button" onClick={handleShowModal}>
+            See Recipe
+            </button>
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <div style={{ textAlign: "center" }}>
+          <img variant="top" textAlign="center" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
+          </div>
+          <div style={{ marginTop: "20px" }}>
+           <h4>Ingredients:</h4>
+          {recipes[currentIndex].recipe.ingredients.map(ingredient => (
+                    <li> {ingredient.text}</li>
+                ))}
+          </div>
+          <div style={{ marginTop: "20px" }}>
+          <h4>Recipe Link:</h4>
+          <a href={recipes[currentIndex].recipe.url} target="_blank" rel="noopener noreferrer">
+          {  recipes[currentIndex].recipe.url}
+          </a>
+
+          </div>
+          <div className="comment-section">
+          {comments.map((comment, index) => (
+              <p key={index}>{comment}</p>
+            ))}
+
+            
+            <CommentSection
+        customNoComment={() => {
+          return <div></div>;
+        }}
+        currentUser={{
+          currentUserId: "01a",
+          currentUserImg:
+            "https://ui-avatars.com/api/name=Riya&background=random",
+          currentUserProfile:
+            "https://www.linkedin.com",
+          currentUserFullName: username
+        }}
+        advancedInput={true}
+        titleStyle={{
+          width: '50%',
+          padding: "7px 15px"
+        }}
+        hrStyle={{ border: "0.5px solid #ff0072" }}
+        
+        commentData={commentData}
+        logIn={{
+          loginLink: "http://localhost:3001/",
+          signupLink: "http://localhost:3001/"
+        }}
+        customImg="./files/profile.png"
+        inputStyle={{ border: "1px solid rgb(208 208 208)" }}
+        submitBtnStyle={{
+          border: "1px solid black",
+          backgroundColor: "black",
+          padding: "7px 15px"
+        }}
+        
+        cancelBtnStyle={{
+          border: "1px solid gray",
+          backgroundColor: "gray",
+          color: "white",
+          padding: "7px 15px"
+        }}
+        
+        replyInputStyle={{ borderBottom: "1px solid black", color: "black" }}
+      />
+             
+            </div>
+            
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
           </TinderCard>
         )}
        
