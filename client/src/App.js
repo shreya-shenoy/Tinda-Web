@@ -1,29 +1,29 @@
-// inside src/App.js
-// Replace previous code with this.
-
 import React from "react";
-import { useForm } from "react-hook-form";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+
+import MainPage from "./MainPage";
+import LoginForm from "./LoginForm";
+import RecipeSearch from "./RecipeSearch";
+import Signup from './Signup'
+import Login from './Login'
+import ProfilePage from "./ProfilePage";
+
 
 function App() {
-	const { register, handleSubmit, formState: { errors } } = useForm();
-
-	const onSubmit = (data) => console.log(data);
-
-	return (
-		<>
-			<p className="title">Sign Up</p>
-
-			<form className="App" onSubmit={handleSubmit((data)=>onSubmit(data))}>
-				<label htmlFor = "email"> Email:</label>
-				<input type="email" {...register("email", { required: true })} />
-				{errors.email && <span style={{ color: "red" }}>
-					*Email* is mandatory </span>}
-        <label htmlFor = "email"> Password:</label>
-				<input type="password" {...register("password")} />
-				<input type={"submit"} style={{ backgroundColor: "#a1eafb" }} />
-			</form>
-		</>
-	);
+  return (
+    <Router>
+    <Routes>
+    <Route exact path="/" element={<Navigate to="/login" />} />
+      <Route exact path="/register" element={<Signup />} />
+      <Route exact path="/login" element={<Login />} />
+      <Route path="/MainPage" element={<MainPage />} />
+      <Route path="/ProfilePage" element={<ProfilePage />} />
+    </Routes>
+    </Router>
+   
+  );
 }
+
+
 export default App;

@@ -10,7 +10,7 @@ body {
 .title {
 	text-align: center;
 	width: 30vw;
-	background-color: rgb(247, 226, 143);
+	background-color: rgb(255, 234, 253);
 	padding: 2vw 1vw;
 	border-radius: 10px 10px 0 0;
 	font-size: 50px;
@@ -24,13 +24,13 @@ body {
 	margin: auto;
 	width: 30vw;
 	padding: 2vw 1vw;
-	background-color: rgb(250, 194, 194);
-	border-radius: 0 0 10px 10px;
+	background-color: rgb(255, 234, 253);
+	border-radius: 0 0 12px 12px;
 }
 
 input {
-	border: 1px solid rgb(172, 171, 171);
-	border-radius: 10px;
+	border: 1px solid rgb(255, 234, 253);
+	border-radius: 12px;
 	padding: 1vw 1vw;
 	outline: none;
 	margin: 5px;
