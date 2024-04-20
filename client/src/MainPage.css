@@ -129,3 +129,50 @@
     top: 14px; 
     right: 30px; 
   }
+
+  /* CSS styles for the comment section */
+.comment-section {
+  background-color: #f8f9fa; /* Set background color */
+  border: 1px solid #e9ecef; /* Add border */
+  border-radius: 8px; /* Add border radius for rounded corners */
+  padding: 20px; /* Add padding */
+}
+
+/* CSS styles for individual comments */
+.comment {
+  margin-bottom: 15px; /* Add space between comments */
+  padding: 15px; /* Add padding */
+  border: 1px solid #ced4da; /* Add border */
+  border-radius: 8px; /* Add border radius for rounded corners */
+  background-color: #fff; /* Set background color */
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment-header img {
+  width: 40px; /* Set width for avatar */
+  height: 40px; /* Set height for avatar */
+  border-radius: 50%; /* Make avatar round */
+  margin-right: 10px; /* Add space between avatar and text */
+}
+
+.username {
+  font-weight: bold; /* Make username bold */
+  margin-right: 10px; /* Add space between username and timestamp */
+}
+
+.timestamp {
+  color: #6c757d; /* Set color for timestamp */
+}
+
+.comment-content {
+  margin-bottom: 10px; /* Add space between content and actions */
+}
+
+.comment-actions button {
+  margin-right: 10px; /* Add space between action buttons */
+}

@@ -2,7 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
 const UserModel = require("./models/User")
-const CommentModel = require("./models/Comment")
+const Comment = require("./models/Comment")
 
 const app = express()
 app.use(express.json())
@@ -44,7 +44,7 @@ app.post("/register", (req, res) => {
     .catch(err => res.json(err))
 })
 
-app.post("/comments", async (req, res) => {
+/*app.post("/comments", async (req, res) => {
     try {
       
       const { username, content, recipeId } = req.body;
@@ -77,7 +77,7 @@ app.post("/comments", async (req, res) => {
       console.error("Error retrieving comments:", error);
       res.status(500).json({ error: "Internal server error" });
     }
-  });
+  });*/
 
 app.post("/like", async (req, res) => {
     try {
@@ -96,6 +96,29 @@ app.post("/like", async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   });
+app.get('/comments', async (req, res) => {
+    try {
+      const comments = await Comment.find();
+      res.json(comments);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
+  // Post comment
+app.post('/comments', async (req, res) => {
+    try {
+      const { content, username, recipeId } = req.body;
+      const newComment = new Comment({ content, username, recipeId });
+      await newComment.save();
+      res.status(201).json(newComment);
+    } catch (error) {
+      console.error('Error posting comment:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
 
 app.listen(3001, () => {
     console.log("server is running")
