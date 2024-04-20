@@ -16,6 +16,7 @@ import ProfilePage from "./ProfilePage";
 import {useLocation} from "react-router-dom";
 import 'react-comments-section/dist/index.css'
 
+
 // Reference: https://www.npmjs.com/package/react-tinder-card - Code Demo and Examples
 
 
@@ -31,10 +32,10 @@ function MainPage() {
   const[search, setSearch] = useState("");
   const[query, setQuery] = useState('pasta');
   //const childRefs = useRef([]);
-
+  const [newCommentText, setNewCommentText] = useState('');
   
   const [showModal, setShowModal] = useState(false);
-  const [comment, setComment] = useState("");
+  //const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [commentData] = useState([]);
   const [recipeLength, setRecipeLength] = useState(0);
@@ -48,16 +49,18 @@ function MainPage() {
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
 
-  const handleEmojiClick = (emoji) => {
+  /*const handleEmojiClick = (emoji) => {
     const emojiString = emoji.unified;
     setComment(comment + emojiString); // Update the comment state with the selected emoji'
     console.log(emojiString);
     setIsPickerOpen(false); // Close the emoji picker after selecting an emoji
-  };
+  };*/
   
   console.log("RECIPES LENGTH", recipes.length);
   
-  
+  useEffect(() =>{
+    getComments();
+  }, []);
 
   const togglePicker = (event) => {
     event.preventDefault(); // Prevent default form submission behavior
@@ -100,7 +103,7 @@ console.log(childRefs);
   const[previousDirection, setPreviousDirection] = useState();
   
 
-  const handleCommentChange = (event) => {
+  /*const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
 
@@ -110,7 +113,7 @@ console.log(childRefs);
     setComments([...comments, commentWithEmoji]); 
     setComment(""); 
     setChosenEmoji(null); 
-  };
+  };*/
   const handleLikeRecipe = async (recipeName) => {
     try {
        // Function to get current user's ID
@@ -120,7 +123,7 @@ console.log(childRefs);
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: username, // Assuming username is defined elsewhere in your code
+          name: username, 
           recipeName: recipeName,
         }),
       });
@@ -158,16 +161,45 @@ console.log(childRefs);
   const outOfFrame = (recipe, index) => {
     console.log(recipe + ' left screen')
   }
-  /*const swipe = async (dir) => {
-    console.log("Swipe", childRefs);
-
-    if(canSwipe && currentIndex >= 0 && currentIndex < recipes.length && childRefs.current[currentIndex] && childRefs.current) // index is within valid indices of db
-    {
-      await childRefs.current[currentIndex].current.swipe(dir) // Swipe the card in this direction
-      console.log("Swipe");
-      updateCurrentIndex(dir === "left" ? currentIndex + 1 : currentIndex - 1);
+  const getComments = async () => {
+    try{
+      const response = await fetch('http://localhost:3001/comments');
+      if(!response.ok){
+        throw new Error('Failed to get comments');
+      }
+      const data = await response.json();
+      setComments(data);
     }
-  }*/
+    catch(error){
+      console.error('Error with comments: ', error);
+      setComments([]);
+    }
+
+  };
+  const handleCommentSubmit = async (event, recipeId) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('http://localhost:3001/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          content: newCommentText,
+          username: username,
+          recipeId: recipeId
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add comment');
+      }
+      const newComment = await response.json();
+      setComments([...comments, newComment]);
+      setNewCommentText(''); // Clear input field after submission
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
   const swipe = async (dir) => {
     console.log("SWIPE: RECIPES LENGTH", recipes.length);
     console.log("SWIPE: CHILD REFS", childRefs[currentIndex]);
@@ -203,6 +235,21 @@ console.log(childRefs);
       <img src='./files/Filtericons.png' width={50} height={50} alt="Filter Icon" />
         Filters
       </button>
+      <CommentSection
+          apiBaseUrl="YOUR_PUBLIC_API_URL"
+          articleId="UNIQUE_ARTICLE_ID"
+          /*callbacks={{
+            loginClickCallback: ,
+            commentAuthorClickCallback: COMMENT_AUTHOR_CLICK_CALLBACK,
+            currentUserClickCallback: CURRENT_USER_CLICK_CALLBACK
+          }}*/
+          currentUser={username ? {
+            name: username,
+            img: './files/profile.png'
+          } : undefined}
+        />
+
+        
       <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Filters</Modal.Title>
@@ -268,52 +315,41 @@ console.log(childRefs);
 
           </div>
           <div className="comment-section">
-          {comments.map((comment, index) => (
-              <p key={index}>{comment}</p>
-            ))}
+          
+            <div>
+              
+          <h2>Comments </h2>
 
+                <ul>
+                  {comments && comments.map((comment,index) => (
+                    <div key={comment.id} className="comment">
+                    <div className="comment-header">
+                      <img src={"./files/profile.png"} width={20} height={20} alt="Avatar" />
+                      <span className="username">{comment.username}</span>
+                      <span className="timestamp">{comment.timestamp}</span>
+                    </div>
+                    <div className="comment-content">{comment.content}</div>
+                    <div className="comment-actions">
+                      {/* Add reply, like, and delete buttons */}
+                      <button>Reply</button>
+                      <button>Like</button>
+                      <button>Delete</button>
+                    </div>
+                  </div>
+                  ))}
+                </ul>
+                <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
+                  <input
+                    type="text"
+                    value={newCommentText}
+                    onChange={(e) => setNewCommentText(e.target.value)}
+                    placeholder="Add a new comment"
+                  />
+                  <button type="submit">Add Comment</button>
+                </form>
+        </div>
             
-            <CommentSection
-        customNoComment={() => {
-          return <div></div>;
-        }}
-        currentUser={{
-          currentUserId: "01a",
-          currentUserImg:
-            "https://ui-avatars.com/api/name=Riya&background=random",
-          currentUserProfile:
-            "https://www.linkedin.com",
-          currentUserFullName: username
-        }}
-        advancedInput={true}
-        titleStyle={{
-          width: '50%',
-          padding: "7px 15px"
-        }}
-        hrStyle={{ border: "0.5px solid #ff0072" }}
-        
-        commentData={commentData}
-        logIn={{
-          loginLink: "http://localhost:3001/",
-          signupLink: "http://localhost:3001/"
-        }}
-        customImg="./files/profile.png"
-        inputStyle={{ border: "1px solid rgb(208 208 208)" }}
-        submitBtnStyle={{
-          border: "1px solid black",
-          backgroundColor: "black",
-          padding: "7px 15px"
-        }}
-        
-        cancelBtnStyle={{
-          border: "1px solid gray",
-          backgroundColor: "gray",
-          color: "white",
-          padding: "7px 15px"
-        }}
-        
-        replyInputStyle={{ borderBottom: "1px solid black", color: "black" }}
-      />
+           
              
             </div>
             

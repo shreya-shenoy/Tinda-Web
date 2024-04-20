@@ -27,6 +27,7 @@
     "react-scripts": "5.0.1",
     "react-tinder-card": "^1.6.4",
     "reactjs-popup": "^2.0.6",
+    "replyke": "^2.0.21",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
