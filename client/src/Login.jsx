@@ -19,8 +19,14 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        axios.post("http://localhost:3001/login", { email, password })
+
+        if (!email || !password) {
+            setLoginError("Email and password are required");
+            return;
+        }
+
         
+        axios.post("http://localhost:3001/login", { email, password })
         .then(result => {
             //console.log("Login response:", result);
             if(result.data.isAuthenticated){
