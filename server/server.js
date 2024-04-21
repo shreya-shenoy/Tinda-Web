@@ -21,6 +21,7 @@ app.post("/login", (req, res) => {
         if(user) {
             if(user.password === password){
                 res.json({
+                    isAuthenticated: true,
                     success: true,
                     message: "Success",
                     user: {
@@ -33,7 +34,10 @@ app.post("/login", (req, res) => {
                 res.json("The password is incorrect")
             }
         }else{
-            res.json("No record existed")
+          res.status(401).json({
+            isAuthenticated: false,
+            message: 'Invalid email or password' // Optional error message
+          });
         }
     })
 })
@@ -97,13 +101,15 @@ app.post("/like", async (req, res) => {
     }
   });
 app.get('/comments', async (req, res) => {
-    try {
-      const comments = await Comment.find();
-      res.json(comments);
-    } catch (error) {
-      console.error('Error fetching comments:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
+  try {
+    const recipeId = req.query.recipeId;
+    const comments = await Comment.find({ recipeId: recipeId });
+
+    res.json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
   });
   
   // Post comment

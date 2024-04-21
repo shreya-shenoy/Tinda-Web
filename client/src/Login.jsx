@@ -17,19 +17,14 @@ function Login() {
 
   
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         axios.post("http://localhost:3001/login", { email, password })
         
         .then(result => {
             //console.log("Login response:", result);
-            if(result.data.success){
+            if(result.data.isAuthenticated){
                 const{name, email} = result.data.user;
-                //console.log(result.data.user);
-                //setUsername(result.data.user.name);
-                //navigate(`/MainPage?username=${result.data.user.name}`)
-                //const { name } = result.data.user; 
-                // Destructure the name from result.data
                 setUsername(name);
                 navigate(`/MainPage?username=${name}`);
                 console.log(result.data.user.name);
