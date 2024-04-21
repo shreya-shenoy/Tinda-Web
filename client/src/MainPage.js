@@ -58,9 +58,7 @@ function MainPage() {
   
   console.log("RECIPES LENGTH", recipes.length);
   
-  useEffect(() =>{
-    getComments();
-  }, []);
+  
 
   const togglePicker = (event) => {
     event.preventDefault(); // Prevent default form submission behavior
@@ -99,7 +97,14 @@ console.log(childRefs);
   console.log("currentIndex", currentIndex)
 
   const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = () => setShowModal(true);
+  const handleShowModal = () => {
+    setShowModal(true);
+    if (currentIndex >= 0 && recipes.length > currentIndex && recipes.length > 0) {
+      const recipeId = recipes[currentIndex].recipe.label; // Adjust this if the recipe ID is stored differently
+      getComments(recipeId); // Fetch comments for the currently selected recipe
+    }
+  };
+  
   const[previousDirection, setPreviousDirection] = useState();
   
 
@@ -161,9 +166,9 @@ console.log(childRefs);
   const outOfFrame = (recipe, index) => {
     console.log(recipe + ' left screen')
   }
-  const getComments = async () => {
+  const getComments = async (recipeId) => {
     try{
-      const response = await fetch('http://localhost:3001/comments');
+      const response = await fetch(`http://localhost:3001/comments?recipeId=${recipeId}`);
       if(!response.ok){
         throw new Error('Failed to get comments');
       }
@@ -235,21 +240,7 @@ console.log(childRefs);
       <img src='./files/Filtericons.png' width={50} height={50} alt="Filter Icon" />
         Filters
       </button>
-      <CommentSection
-          apiBaseUrl="YOUR_PUBLIC_API_URL"
-          articleId="UNIQUE_ARTICLE_ID"
-          /*callbacks={{
-            loginClickCallback: ,
-            commentAuthorClickCallback: COMMENT_AUTHOR_CLICK_CALLBACK,
-            currentUserClickCallback: CURRENT_USER_CLICK_CALLBACK
-          }}*/
-          currentUser={username ? {
-            name: username,
-            img: './files/profile.png'
-          } : undefined}
-        />
-
-        
+     
       <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Filters</Modal.Title>
@@ -320,7 +311,7 @@ console.log(childRefs);
           <div className="comment-section">
           
             <div>
-              
+          
           <h2>Comments </h2>
 
                 <ul>
