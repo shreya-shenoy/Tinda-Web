@@ -1,73 +1,214 @@
 
 .background, html, body{
-    background-color: rgb(255, 234, 253);
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding:0;
+  /* background-color: rgb(255, 234, 253); */
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding:0;
 }
 
 
 .maintitle {
-    position: absolute;
-    top: 5px;
-    left: 20px; 
-    text-align: center;
-    border: none;
-    padding: 2vw 1vw;
-    font-size: 30px;
-    font-family: "Arial Black", sans-serif;
+  position: center;
+  top: 5px;
+  left: 20px; 
+  text-align: center;
+  border: none;
+  padding: 2vw 1vw;
+  font-size: 30px;
+  font-family: "Arial Black", sans-serif;
+  color: rgb(23,36,78);
 }
 .filtertitle {
-    position: absolute;
-    background-color: rgb(255, 244, 255);
-    top: 100px; 
-    left: 15px; 
-    text-align: center;
-    padding: 0.3vw 0.2vw;
-    border: none;
-    font-size: 20px;
-    font-family: "Arial Black", sans-serif;
+  position: absolute;
+  background-color: rgb(255, 244, 255);
+  left: 150px; 
+  top: 14px; 
+  text-align: center;
+  padding: 0.3vw 0.2vw;
+  border: none;
+  font-size: 20px;
+  font-family: "Arial Black", sans-serif;
 }
 
 .recipeContainer{
-    background-color: rgb(255, 234, 253);
-    padding:0;
-
-    width: 300px;
-    height: 400px;
+  padding:0;
+  /* width: 300px;
+  height: 400px; */
 }
 
 .modal {
-    font-size: 12px;
-  }
-  .modal > .header {
-    width: 100%;
-    border-bottom: 1px solid gray;
-    font-size: 18px;
-    text-align: center;
-    padding: 5px;
-  }
-  .modal > .content {
-    width: 100%;
-    padding: 10px 5px;
-  }
-  .modal > .actions {
-    width: 100%;
-    padding: 10px 5px;
-    margin: auto;
-    text-align: center;
-  }
-  .modal > .close {
-    cursor: pointer;
-    position: absolute;
-    display: block;
-    padding: 2px 5px;
-    line-height: 20px;
-    right: -10px;
-    top: -10px;
-    font-size: 24px;
-    background: #ffffff;
-    border-radius: 18px;
-    border: 1px solid #cfcece;
-  }
+  font-size: 12px;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+
+.comment-section {
+  width: 100%;
+  height: 50%;
+}
+
+.comment-input-container {
+  position: relative;
+}
+
+.comment-input {
+  width: calc(100% - 80px);
+  resize: vertical;
+}
+
+.submit-button {
+  text-align: center;
+  position: absolute;
+  bottom: 5px; 
+  right: 5px;
+  width: 60px;
+  height: 30px;
+  font-size: 14px;
+}
+.swiperightbutton{
+  background-color: #ddffe8;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 4px;
+  border-radius:50%;
+  opacity: .6;
+
+}
+
+.swipeleftbutton{
+  background-color: #fff0ef;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 4px;
+  border-radius:50%;
+  opacity: .6;
+
+}
+
+.profileicon{
+  position: absolute;
+  text-align: right;
+  top: 14px; 
+  right: 30px; 
+}
+
+/* CSS styles for the comment section */
+.comment-section {
+background-color: #f8f9fa; /* Set background color */
+border: 1px solid #e9ecef; /* Add border */
+border-radius: 8px; /* Add border radius for rounded corners */
+padding: 20px; /* Add padding */
+}
+
+/* CSS styles for individual comments */
+.comment {
+margin-bottom: 15px; /* Add space between comments */
+padding: 15px; /* Add padding */
+border: 1px solid #ced4da; /* Add border */
+border-radius: 8px; /* Add border radius for rounded corners */
+background-color: #fff; /* Set background color */
+}
+
+.comment-header {
+display: flex;
+align-items: center;
+margin-bottom: 10px;
+}
+
+.comment-header img {
+width: 40px; /* Set width for avatar */
+height: 40px; /* Set height for avatar */
+border-radius: 50%; /* Make avatar round */
+margin-right: 10px; /* Add space between avatar and text */
+}
+
+.username {
+font-weight: bold; /* Make username bold */
+margin-right: 10px; /* Add space between username and timestamp */
+}
+
+.timestamp {
+color: #6c757d; /* Set color for timestamp */
+}
+
+.comment-content {
+margin-bottom: 10px; /* Add space between content and actions */
+}
+
+.comment-actions button {
+margin-right: 10px; /* Add space between action buttons */
+}
+
+.wrapper {
+  width:420px;
+  background: transparent;
+  /* border: 2px solid rgba(255,255,255,.2); */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+  /* color: #fff; */
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+
+.wrapper h1 {
+  font-size: 36px;
+  text-align: center;
+
+}
+
+.wrapper .forget-password {
+  display: flex;
+   justify-content: space-between;
+  font-size: 14.5px;
+  /* margin: -15px 0 15px;  */
+}
+
+.forget-password a{
+  color: rgb(23,36,78);
+  text-decoration: none;
+}
+
+.forget-password a:hover{
+  text-decoration: underline;
+}
+
+.text-color{
+  color: rgb(23,36,78);
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Recipe = ({title, calories, image, ingredients}) => {
+const Recipe = ({title, calories, image, ingredients, url}) => {
     return(
         <div>
             <h1> {title}</h1>
@@ -12,6 +12,7 @@ const Recipe = ({title, calories, image, ingredients}) => {
             
             </ol>
             <p> Calories: {calories.toFixed()}</p>
+            <p> Url: {url} </p>
             <img className={image} src={image} atl=""/>
 
         </div>

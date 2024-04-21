@@ -1,47 +1,46 @@
-import React from "react";
+import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./LoginForm.css";
-import {FaUser, FaLock} from "react-icons/fa";
+import "./MainPage.css";
 
 function LoginForm() {
     const navigate = useNavigate(); // Replace useHistory with useNavigate
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [error, setError] = useState("");
   
-    const onSubmit = (data) => {
-      console.log(data);
+    const onSubmit = async (data) => {
+      try{
+        const response = await axios.post("/login", data);
+        if(response.status == 200){
+          navigate("/MainPage");
+        }
+      }
+      catch (err){
+        setError("Invalid email or password");
+        console.error("Login error:", err);
+      }
       reset();
-      navigate("/MainPage"); // Use navigate instead of history.push
+      
     }
   
     return (
-
       <>
-     
-      <div className = 'New-Background'>
-      <div className = 'wrapper'>
-        <form className="App" action="" onSubmit={handleSubmit(onSubmit)}>
-        <h1>Login</h1>
-        <div className="input-box">
-          <input input type="text" placeholder='Username' {...register("email", { required: true })} />
-          <FaUser className='icon' />
-          {errors.email && <span style={{ color: "whitee" }}>*Email is mandatory</span>}
-          </div>
-
-
-          <div className="input-box">
-          <input type="password" placeholder='Password' {...register("password", { required: true })} />
-          {errors.password && <span style={{ color: "white" }}>*Password is mandatory</span>}
-          <FaLock className='icon' />
-          </div>
-
-          <button type="submit">Login</button>
+        <p className="title">Sign Up</p>
+  
+        <form className="App" onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="email">Email:</label>
+          <input type="email" {...register("email", { required: true })} />
+          {errors.email && <span style={{ color: "red" }}>*Email is mandatory</span>}
+  
+          <label htmlFor="password">Password:</label>
+          <input type="password" {...register("password", { required: true })} />
+          {errors.password && <span style={{ color: "red" }}>*Password is mandatory</span>}
+  
+          <input type="submit" style={{ backgroundColor: "#a1eafb" }} />
         </form>
-        </div>
-        </div>
-        
       </>
-      
     );
   }
 
