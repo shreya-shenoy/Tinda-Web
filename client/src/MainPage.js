@@ -33,6 +33,7 @@ function MainPage() {
   const[query, setQuery] = useState('pasta');
   //const childRefs = useRef([]);
   const [newCommentText, setNewCommentText] = useState('');
+  const [imageData, setImageData] = useState(null);
   
   const [showModal, setShowModal] = useState(false);
   //const [comment, setComment] = useState("");
@@ -192,7 +193,8 @@ console.log(childRefs);
         body: JSON.stringify({ 
           content: newCommentText,
           username: username,
-          recipeId: recipeId
+          recipeId: recipeId,
+          imageData: imageData
         })
       });
       if (!response.ok) {
@@ -205,6 +207,15 @@ console.log(childRefs);
       console.error('Error adding comment:', error);
     }
   };
+  const handleImageUpload = (files) => {
+    const file = files[0]; 
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImageData(reader.result);
+    };
+};
+
   const swipe = async (dir) => {
     console.log("SWIPE: RECIPES LENGTH", recipes.length);
     console.log("SWIPE: CHILD REFS", childRefs[currentIndex]);
@@ -322,6 +333,9 @@ console.log(childRefs);
                       <span className="username">{comment.username}</span>
                       <span className="timestamp">{comment.timestamp}</span>
                     </div>
+                    {comment.imageData && (
+                    <img src={comment.imageData} alt="Uploaded Image" />
+                    )}
                     <div className="comment-content">{comment.content}</div>
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
@@ -339,8 +353,13 @@ console.log(childRefs);
                     onChange={(e) => setNewCommentText(e.target.value)}
                     placeholder="Add a new comment"
                   />
+                  <input
+                    type="file"
+                    onChange={(e) => handleImageUpload(e.target.files)}
+                  />
                   <button type="submit">Add Comment</button>
                 </form>
+
         </div>
             
            
