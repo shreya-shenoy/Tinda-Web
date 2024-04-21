@@ -184,25 +184,40 @@ console.log(childRefs);
   };
   const handleCommentSubmit = async (event, recipeId) => {
     event.preventDefault();
+    
+      // const response = await fetch('http://localhost:3001/comments', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({ 
+      //     content: newCommentText,
+      //     username: username,
+      //     recipeId: recipeId,
+      //     imageData: imageData
+      //   })
+      // });
+      const formData = new FormData();
+    formData.append('content', newCommentText);
+    formData.append('username', username);
+    formData.append('recipeId', recipeId);
+    // formData.append('image', imageData); // Append the image data to the form data
+    if (imageData) {
+      formData.append('image', imageData); // Append the image data
+    }
     try {
-      const response = await fetch('http://localhost:3001/comments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          content: newCommentText,
-          username: username,
-          recipeId: recipeId,
-          imageData: imageData
-        })
-      });
+    const response = await fetch('http://localhost:3001/comments', {
+      method: 'POST',
+      body: formData, // Send the form data containing both text and image
+    });
       if (!response.ok) {
         throw new Error('Failed to add comment');
       }
       const newComment = await response.json();
       setComments([...comments, newComment]);
-      setNewCommentText(''); // Clear input field after submission
+      setNewCommentText('');  // Clear input field after submission
+      setImageData(null);
+      
     } catch (error) {
       console.error('Error adding comment:', error);
     }
