@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginForm.css";
+import "./MainPage.css";
 
 function LoginForm() {
     const navigate = useNavigate(); // Replace useHistory with useNavigate

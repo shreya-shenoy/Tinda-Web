@@ -9,6 +9,7 @@ function Login() {
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    const [showPassword, setShowPassword] = useState(false);
     const [username, setUsername] = useState(null);
 
     const navigate = useNavigate()
@@ -46,16 +47,19 @@ function Login() {
 
 
   return (
-    
-    <div className="d-flex justify-content-center align-items-center bg-secondary vh-300 ">
-        <div className="bg-white p-3 rounded w-200">
+    <div className="wrapper">
+    {/* <div className="d-flex justify-content-center align-items-center bg-secondary vh-300 "> */}
+        <div className="p-3 rounded w-200">
+            <div className="text-color">
             <h1 className="maintitle"> Tinda Swipe </h1>
-            <h2><center>Login</center></h2>
+            <h2><center><b>Login</b></center></h2>
+            </div>
+          
             <form onSubmit={handleSubmit}>
                 
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Email</strong>
+                        <strong className="text-color">Email</strong>
                     </label>
                     <input type="text" 
                     placeholder='Enter Email' 
@@ -68,30 +72,39 @@ function Login() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Password</strong>
+                        <strong className="text-color">Password</strong>
                     </label>
-                    <input type="password" 
+                    <input type={showPassword ? "text" : "password"}
                     placeholder='Enter Password' 
                     name='password' 
                     className='form-control rounded-0' 
                     onChange={(e) => setPassword(e.target.value)}
 
                     />
+                    <input
+                type="checkbox"
+                id="showPassword"
+                onChange={(e) => setShowPassword(e.target.checked)}
+            />
+            <label htmlFor="showPassword">Show Password</label>
                 </div>
                 {loginError && <span style={{ color: "red" }}>{loginError}</span>}
 
                 <button type="submit" className="btn btn-success w-100 rounded-0">
                     Login
                 </button>
-                </form>
-                <p>Don't have an account?</p>
-                <Link to="/register" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-                    Sign Up
+                </form>           
+                <div className="forget-password">
+                    <Link to="/register">
+                    <a href = "#">Don't have an account?</a>
                 </Link>
+                </div>
+                
             
         </div>
         
     </div>
+  
  
   );
 }

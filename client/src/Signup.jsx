@@ -8,6 +8,7 @@ function Signup() {
     const [name, setName] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate()
 
     const handleSubmit = (e) => {
@@ -21,14 +22,14 @@ function Signup() {
 
 
   return (
-    <div className="d-flex justify-content-center align-items-center bg-secondary vh-100 vw=200">
-        <div className="bg-white p-3 rounded w-200">
-        <h2><center>Sign Up</center></h2>
+    <div className="wrapper">
+        <div className="p-3 rounded w-200">
+        <h2 className="text-color"><center><b>Sign Up</b></center></h2>
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Name</strong>
+                        <strong className="text-color">Name</strong>
                     </label>
                     <input type="text" 
                     placeholder='Enter Name' 
@@ -40,7 +41,7 @@ function Signup() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Email</strong>
+                        <strong className="text-color">Email</strong>
                     </label>
                     <input type="text" 
                     placeholder='Enter Email' 
@@ -53,24 +54,32 @@ function Signup() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Password</strong>
+                        <strong className="text-color">Password</strong>
                     </label>
-                    <input type="password" 
+                    <input type={showPassword ? "text" : "password"}
                     placeholder='Enter Password' 
                     name='password' 
                     className='form-control rounded-0' 
                     onChange={(e) => setPassword(e.target.value)}
 
                     />
+                     <input
+                type="checkbox"
+                id="showPassword"
+                onChange={(e) => setShowPassword(e.target.checked)}
+            />
+            <label htmlFor="showPassword">Show Password</label>
                 </div>
                 <button type="submit" className="btn btn-success w-100 rounded-0">
                     Sign Up
                 </button>
                 </form>
-                <p>Already have an account?</p>
-                <Link to="/login" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-                    Login
+                <div className="forget-password">
+                    <Link to="/login">
+                    <a href = "#">Already have an account?</a>
                 </Link>
+                </div>
+               
             
         </div>
     </div>

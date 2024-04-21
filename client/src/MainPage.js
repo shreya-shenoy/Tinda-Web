@@ -229,7 +229,7 @@ console.log(childRefs);
       </Link>
        
       </div>
-      <h1 className = 'maintitle'> Tinda Swipe </h1>
+      
       <div>
       <button type="button" className="filtertitle" onClick={handleShowModal}>
       <img src='./files/Filtericons.png' width={50} height={50} alt="Filter Icon" />
@@ -267,7 +267,10 @@ console.log(childRefs);
           </Modal.Footer>
         </Modal>
     </div>
-    
+   <div className="wrapper">
+    {/* <h1 className = 'maintitle'> <center><b>Tinda Swipe </b></center></h1> */}
+
+      <center>
       <div className='recipeContainer'>
         {currentIndex >= 0 && recipes.length > currentIndex &&  recipes.length > 0 && (
           <TinderCard ref={childRefs[currentIndex]} className='swipe' key={recipes[currentIndex].recipe.label} onSwipe={(dir) => swiped(dir, recipes[currentIndex].recipe, currentIndex)} onCardLeftScreen={() => outOfFrame(recipes[currentIndex].recipe.label, currentIndex)}>
@@ -290,7 +293,7 @@ console.log(childRefs);
               </Button>
               </div>
             </Card>
-            <button type="button" onClick={handleShowModal}>
+            <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowModal}>
             See Recipe
             </button>
         <Modal show={showModal} onHide={handleCloseModal}>
@@ -363,6 +366,9 @@ console.log(childRefs);
           </TinderCard>
         )}
        
+      
+      </div>
+      </center>
       </div>
       
 
