@@ -23,6 +23,7 @@ import 'react-comments-section/dist/index.css'
 
 
 
+
 function MainPage() {
   const APP_ID = '8bbd57b4';
   const APP_KEY = '6424d94c5f215da7af69015836e315e8';
@@ -36,6 +37,7 @@ function MainPage() {
   const [imageData, setImageData] = useState(null);
   
   const [showModal, setShowModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
   //const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [commentData] = useState([]);
@@ -50,6 +52,38 @@ function MainPage() {
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
 
+
+const [image,setImage] = useState("");
+
+  function covertToBase64(e){
+    console.log(e);
+    var reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload=()=>{
+
+      console.log(reader.result);
+      setImage(reader.result);
+    };
+
+    reader.onerror = error =>{
+      console.log("Error: ", error);
+    };
+  }
+ 
+  function uploadImage(){
+    fetch("http://localhost:3001/upload-image",{
+      method: "POST",
+      crossDOmain: true,
+      headers:{
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin":"*",
+      },
+      body: JSON.stringify({
+        base64:image
+      })
+    }).then((res)=> res.json()).then((data)=> console.log(data))
+  }
   /*const handleEmojiClick = (emoji) => {
     const emojiString = emoji.unified;
     setComment(comment + emojiString); // Update the comment state with the selected emoji'
@@ -104,6 +138,12 @@ console.log(childRefs);
       const recipeId = recipes[currentIndex].recipe.label; // Adjust this if the recipe ID is stored differently
       getComments(recipeId); // Fetch comments for the currently selected recipe
     }
+  };
+
+
+  const handleCloseImageModal = () => setShowImageModal(false);
+  const handleShowImageModal = () => {
+    setShowImageModal(true);
   };
   
   const[previousDirection, setPreviousDirection] = useState();
@@ -184,40 +224,25 @@ console.log(childRefs);
   };
   const handleCommentSubmit = async (event, recipeId) => {
     event.preventDefault();
-    
-      // const response = await fetch('http://localhost:3001/comments', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify({ 
-      //     content: newCommentText,
-      //     username: username,
-      //     recipeId: recipeId,
-      //     imageData: imageData
-      //   })
-      // });
-      const formData = new FormData();
-    formData.append('content', newCommentText);
-    formData.append('username', username);
-    formData.append('recipeId', recipeId);
-    // formData.append('image', imageData); // Append the image data to the form data
-    if (imageData) {
-      formData.append('image', imageData); // Append the image data
-    }
     try {
-    const response = await fetch('http://localhost:3001/comments', {
-      method: 'POST',
-      body: formData, // Send the form data containing both text and image
-    });
+      const response = await fetch('http://localhost:3001/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          content: newCommentText,
+          username: username,
+          recipeId: recipeId,
+          // imageData: newImageData
+        })
+      });
       if (!response.ok) {
         throw new Error('Failed to add comment');
       }
       const newComment = await response.json();
       setComments([...comments, newComment]);
-      setNewCommentText('');  // Clear input field after submission
-      setImageData(null);
-      
+      setNewCommentText(''); // Clear input field after submission
     } catch (error) {
       console.error('Error adding comment:', error);
     }
@@ -227,7 +252,7 @@ console.log(childRefs);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setImageData(reader.result);
+      // setImageData(reader.result);
     };
 };
 
@@ -310,9 +335,44 @@ console.log(childRefs);
               </Button>
               </div>
             </Card>
+            &nbsp;
             <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowModal}>
             See Recipe
             </button>
+            &nbsp;
+            <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowImageModal}>
+            See Recipe Images
+            </button>
+
+                
+
+            <Modal show={showImageModal} onHide={handleCloseImageModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>{recipes[currentIndex].recipe.label} Images</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="auth-wrapper">
+              <div className="auth-inner" style={{width: "auto"}}>
+                Upload your Recipe!<br/>
+                <input accept="image/*"
+                type="file"
+                onChange={covertToBase64}
+
+                />
+
+                {image==""||image==null?"": <img width = {100} height = {100} src={image}/>}
+                <button onClick={uploadImage}>Upload</button>
+                {/* <button>Upload</button> */}
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseImageModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+          </Modal>
+
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
@@ -348,9 +408,9 @@ console.log(childRefs);
                       <span className="username">{comment.username}</span>
                       <span className="timestamp">{comment.timestamp}</span>
                     </div>
-                    {comment.imageData && (
+                    {/* {comment.imageData && (
                     <img src={comment.imageData} alt="Uploaded Image" />
-                    )}
+                    )} */}
                     <div className="comment-content">{comment.content}</div>
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
@@ -368,10 +428,10 @@ console.log(childRefs);
                     onChange={(e) => setNewCommentText(e.target.value)}
                     placeholder="Add a new comment"
                   />
-                  <input
+                  {/* <input
                     type="file"
                     onChange={(e) => handleImageUpload(e.target.files)}
-                  />
+                  /> */}
                   <button type="submit">Add Comment</button>
                 </form>
 
