@@ -3,13 +3,18 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const UserModel = require("./models/User")
 const Comment = require("./models/Comment")
+const bodyParser = require('body-parser');
 
 const app = express()
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json())
 app.use(cors())
 const dbUrl = ATLAS_URI = 'mongodb+srv://shreyas:passcode@tinda.q783xqc.mongodb.net/?retryWrites=true&w=majority&appName=Tinda';
 //mongoose.connect("mongodb://127.0.0.1:27017/employee");
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 app.post("/login", (req, res) => {
     const {email, password} = req.body;
@@ -100,7 +105,7 @@ app.post("/like", async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   });
-app.get('/comments', async (req, res) => {
+/*app.get('/comments', async (req, res) => {
   try {
     const recipeId = req.query.recipeId;
     const comments = await Comment.find({ recipeId: recipeId });
@@ -110,7 +115,27 @@ app.get('/comments', async (req, res) => {
     console.error('Error fetching comments:', error);
     res.status(500).json({ message: 'Server error' });
   }
+  });*/
+  app.get('/comments', async (req, res) => {
+    try {
+      const recipeId = req.query.recipeId;
+      const comments = await Comment.find({ recipeId: recipeId });
+  
+      // Map the comments array to include both content and imagePath
+      const commentsWithImages = comments.map(comment => ({
+        content: comment.content,
+        imageData: comment.imageData,
+        username: comment.username
+      }));
+      console.log("Comments with images:", commentsWithImages)
+      // Send the comments with their image paths in the response
+      res.json(commentsWithImages);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
   });
+  
   
   // Post comment
 app.post('/comments', async (req, res) => {

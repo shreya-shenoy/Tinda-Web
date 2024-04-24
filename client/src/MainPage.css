@@ -131,7 +131,14 @@
   right: 30px; 
 }
 
+
 /* CSS styles for the comment section */
+.comment-image{
+  position: absolute;
+  text-align: right;
+  top: 14px; 
+  right: 30px; 
+}
 .comment-section {
 background-color: #f8f9fa; /* Set background color */
 border: 1px solid #e9ecef; /* Add border */
@@ -163,7 +170,7 @@ margin-right: 10px; /* Add space between avatar and text */
 
 .username {
 font-weight: bold; /* Make username bold */
-margin-right: 10px; /* Add space between username and timestamp */
+ /* Add space between username and timestamp */
 }
 
 .timestamp {
@@ -215,6 +222,7 @@ margin-right: 10px; /* Add space between action buttons */
   color: rgb(23,36,78);
 }
 
+<<<<<<< HEAD
 .like-button {
   background-color: white;
   color: black;
@@ -227,3 +235,5 @@ margin-right: 10px; /* Add space between action buttons */
   background-color: blue;
   color: white;
 }
+=======
+>>>>>>> 75c1f34 (Display images properly in comments)

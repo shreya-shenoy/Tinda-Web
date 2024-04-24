@@ -301,7 +301,9 @@ console.log(childRefs);
       const commentsWithData = data.map(comment => {
         return {
           ...comment,
-          imagePath: `http://localhost:3001/${comment.imagePath}` // Assuming the path is relative to your server
+          imagePath: `http://localhost:3001/${comment.imagePath}`,
+          username: comment.username
+         
         };
       });
       setComments(commentsWithData);
@@ -339,10 +341,13 @@ console.log(childRefs);
       const newComment = await response.json();
       setComments([...comments, newComment]);
       setNewCommentText(''); // Clear input field after submission
+      setImageData(null);
     } catch (error) {
       console.error('Error adding comment:', error);
     }
   };
+
+  
   const handleImageUpload = (files) => {
     /*const file = files[0]; 
     const reader = new FileReader();
@@ -523,16 +528,20 @@ useEffect(() => {
                       <img src={"./files/profile.png"} width={20} height={20} alt="Avatar" />
                       <span className="username">{comment.username}</span>
                       <span className="timestamp">{comment.timestamp}</span>
-                      {comment.imageData && typeof comment.imageData === 'string' && (
-                        <img src={comment.imageData} alt="Uploaded Image" />
+                      </div> 
+                      <div className="comment-content">{comment.content}</div>
+                      {comment.imageData && (
+                        <img src={comment.imageData} width={250} height={200} alt="Uploaded Image" />
                       )}
                       {/* If imageData is an object with a URL property */}
                       {comment.imageData && typeof comment.imageData === 'object' && comment.imageData.url && (
-                        <img src={comment.imageData.url} alt="Uploaded Image" />
+                        <img src={comment.imageData.url} width={250} height={200} alt="Uploaded Image" />
                       )}
-                                    </div>
+                      
+                     
+                                  
                    
-                    <div className="comment-content">{comment.content}</div>
+                    
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
                       <button className="like-button">Reply</button>
