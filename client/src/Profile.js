@@ -5,7 +5,7 @@ function Profile() {
   return (
     <div className="profile">
       {/* Profile picture */}
-      <img src="./files/profileicon.png" width={100} height={100} alt="Profile" />
+      <img src="./files/profileicon.png" alt="Profile" />
       {/* Bio */}
       <div className="bio">
         <h3>Username</h3>
