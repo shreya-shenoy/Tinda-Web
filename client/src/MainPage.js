@@ -302,12 +302,14 @@ console.log(childRefs);
 
     reader.onload = (event) => {
       setImageData(event.target.result);
+
     };
 
     reader.onerror = (error) => {
       console.error('Error reading file:', error);
     };
 
+>>>>>>> main
     reader.readAsDataURL(file);
 };
 useEffect(() => {
@@ -432,11 +434,12 @@ useEffect(() => {
                       </div> 
                       <div className="comment-content">{comment.content}</div>
                       {comment.imageData && (
-                        <img src={comment.imageData} alt="Uploaded Image "  style={{ width: "200px", height: "auto" }}/>
+
+                        <img src={comment.imageData} width={250} height={200} alt="Uploaded Image" />
                       )}
                       {/* If imageData is an object with a URL property */}
                       {comment.imageData && typeof comment.imageData === 'object' && comment.imageData.url && (
-                        <img src={comment.imageData.url} alt="Uploaded Image" style={{ width: "200px", height: "auto" }} />
+                        <img src={comment.imageData.url} width={250} height={200} alt="Uploaded Image" />
                       )}
                       
                      
@@ -457,9 +460,9 @@ useEffect(() => {
                   </div>
                   ))}
                 </ul>
-              
-            </div>
+
             <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
+
                   <input
                     type="text"
                     value={newCommentText}
@@ -470,8 +473,15 @@ useEffect(() => {
                     type="file"
                     onChange={(e) => handleImageUpload(e.target.files)}
                   />
+
                   <button type="submit" className="button-bg">Add Comment</button>
-                </form>     
+                </form>
+
+        </div>
+            
+           
+             
+            </div>
             
           </Modal.Body>
           <Modal.Footer className="modal-bg">
