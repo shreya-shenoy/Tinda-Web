@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 import EditProfileButton from './EditProfileButton'; // Import the EditProfileButton component
 import './ProfilePage.css';
 
-
 const ProfilePage = () => {
-  const [username, setUsername] = useState('Jane Doe');
+  const [username, setUsername] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [newUsername, setNewUsername] = useState('');
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setUsername(searchParams.get("username"));
+  }, [location.search]);
 
   const handleEditButtonClick = () => {
     setIsEditing(true);
@@ -23,17 +30,16 @@ const ProfilePage = () => {
     setIsEditing(false);
   };
 
-  
   return (
-    <div style={{maxWidth:"540px", margin: "0 auto"}}>
+    <div style={{ maxWidth: "540px", margin: "0 auto" }}>
       <div style={{
         display: "flex",
         justifyContent: "space-around",
-        margin: "18px 0",
+        margin: "20px 0",
         borderBottom: "1px solid grey"
       }}>
         <div>
-          <img style={{ width: "160px", height: "160px", borderRadius: "80px" }}
+          <img style={{ width: "80px", height: "80px", borderRadius: "80px" }}
             src="https://images.unsplash.com/photo-1511688878353-3a2f5be94cd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZnJlZSUyMGltYWdlcyUyMGZvb2R8ZW58MHx8MHx8fDA%3D"
             alt="Profile" />
         </div>
@@ -45,8 +51,8 @@ const ProfilePage = () => {
               onChange={(e) => setNewUsername(e.target.value)}
             />
           ) : (
-            <h4>{username}</h4>
-          )}
+              <h4>{username}</h4>
+            )}
           <div style={{ display: "flex", justifyContent: "space-between", width: "108%" }}>
             <h6>40 matches</h6>
             <h6>50 followers</h6>
@@ -59,8 +65,10 @@ const ProfilePage = () => {
             <button onClick={handleCancelEdit}>Cancel</button>
           </div>
         ) : (
-          <EditProfileButton onClick={handleEditButtonClick} buttonText="Edit Display Name"/>
-        )}
+          <div className = "editButton" style={{width:"30%"}}>
+            <EditProfileButton onClick={handleEditButtonClick} buttonText="Edit Display Name" />
+            </div>
+          )}
       </div>
 
       <div className="gallery">

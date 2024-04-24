@@ -149,7 +149,30 @@ app.post('/comments', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
-  
+  // Assuming you have the necessary imports and setup for your Express app
+
+app.get('/liked-recipes/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    // Find the user by username
+    const user = await User.findOne({ username });
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get the list of liked recipes for the user
+    const likedRecipes = user.likedRecipes;
+
+    res.status(200).json(likedRecipes);
+  } catch (error) {
+    console.error('Error retrieving liked recipes:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 app.listen(3001, () => {
     console.log("server is running")
