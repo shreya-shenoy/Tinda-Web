@@ -71,10 +71,24 @@
   border: 1px solid #cfcece;
 }
 
-.comment-section {
-  width: 100%;
-  height: 50%;
+.comments-heading {
+  position: fixed; /* or position: sticky; */
+  top: 0; /* or any other value to adjust its vertical position */
+  width: 100%; /* Make it span the full width of its container */
+  z-index: 1; /* Ensure it stays on top of other content */
+  background-color: #ffffff; /* Set background color if needed */
+  /* Add any other styles as needed */
 }
+
+.comment-section {
+  /* width: 100%;
+  height: 50%; */
+  padding-top: 40px; 
+  max-height: 300px; /* Set a maximum height for the scroll box */
+  overflow-y: auto; 
+}
+
+
 
 .comment-input-container {
   position: relative;
@@ -211,4 +225,43 @@ margin-right: 10px; /* Add space between action buttons */
 
 .text-color{
   color: rgb(23,36,78);
+}
+
+.modal-bg{
+  background-color: rgb(253,220,177);
+}
+
+.button-bg{
+  background-color: rgb(237, 164, 68);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  width: 150px; /* Adjust the width as needed */
+  height: 40px;
+}
+
+.comment-btn{
+    background-color: rgb(198, 198, 201);
+    border-radius: 5px;
+    border: none;
+    padding: none;
+    width: 75px; /* Adjust the width as needed */
+    height:30px;
+  
+}
+
+
+.like-button {
+  background-color: rgb(198, 198, 201);
+  border-radius: 5px;
+  border: none;
+  width: 50px; /* Adjust the width as needed */
+  height: 30px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.liked {
+  background-color: blue;
+  color: white;
 }

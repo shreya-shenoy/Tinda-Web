@@ -50,6 +50,21 @@ function MainPage() {
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
 
+  const [likedComments, setLikedComments] = useState(() => {
+    const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
+    return storedLikedComments || {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem("likedComments", JSON.stringify(likedComments));
+  }, [likedComments]);
+
+  const handleLikeClick = (commentId) => {
+    setLikedComments(prevLikedComments => ({
+      ...prevLikedComments,
+      [commentId]: !prevLikedComments[commentId]
+    }));
+  };
   /*const handleEmojiClick = (emoji) => {
     const emojiString = emoji.unified;
     setComment(comment + emojiString); // Update the comment state with the selected emoji'
@@ -299,10 +314,10 @@ console.log(childRefs);
             See Recipe
             </button>
         <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
+          <Modal.Header className="modal-bg" closeButton>
             <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="modal-bg">
           <div style={{ textAlign: "center" }}>
           <img variant="top" textAlign="center" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
           </div>
@@ -320,11 +335,12 @@ console.log(childRefs);
 
           </div>
           <div className="comment-section">
-          
+        
             <div>
-          
-          <h2>Comments </h2>
-
+            <ul>
+            <h2>Comments</h2>
+            </ul>
+            
                 <ul>
                   {comments && comments.map((comment,index) => (
                     <div key={comment.id} className="comment">
@@ -334,41 +350,47 @@ console.log(childRefs);
                       <span className="timestamp">{comment.timestamp}</span>
                     </div>
                     {comment.imageData && (
-                    <img src={comment.imageData} alt="Uploaded Image" />
+                    <img src={comment.imageData} alt="Uploaded Image" style={{ width: "200px", height: "auto" }} />
                     )}
                     <div className="comment-content">{comment.content}</div>
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
-                      <button>Reply</button>
-                      <button>Like</button>
-                      <button>Delete</button>
+                   
+                      <button
+            onClick={() => handleLikeClick(index)}
+            className={likedComments[index] ? "like-button liked" : "like-button"}
+          >
+            Like
+          </button>
+                      <button className="comment-btn">Delete</button>
                     </div>
                   </div>
                   ))}
                 </ul>
-                <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
-                  <input
-                    type="text"
-                    value={newCommentText}
-                    onChange={(e) => setNewCommentText(e.target.value)}
-                    placeholder="Add a new comment"
-                  />
-                  <input
-                    type="file"
-                    onChange={(e) => handleImageUpload(e.target.files)}
-                  />
-                  <button type="submit">Add Comment</button>
-                </form>
-
+             
         </div>
             
-           
+
              
             </div>
-            
+            <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
+                  <input
+                    type="text" 
+                    value={newCommentText}
+                    onChange={(e) => setNewCommentText(e.target.value)}
+                    placeholder="Add a new comment" 
+                  />
+                  <input
+                    type="file" 
+                    onChange={(e) => handleImageUpload(e.target.files)}
+                  />
+                  
+                  <button type="submit" className="button-bg">Add Comment</button>
+                </form>
+
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+          <Modal.Footer className="modal-bg">
+            <Button className="button-bg" variant="secondary" onClick={handleCloseModal}>
               Close
             </Button>
           </Modal.Footer>
