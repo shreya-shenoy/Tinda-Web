@@ -23,7 +23,6 @@ import 'react-comments-section/dist/index.css'
 
 
 
-
 function MainPage() {
   const APP_ID = '8bbd57b4';
   const APP_KEY = '6424d94c5f215da7af69015836e315e8';
@@ -37,7 +36,6 @@ function MainPage() {
   const [imageData, setImageData] = useState(null);
   
   const [showModal, setShowModal] = useState(false);
-  const [showImageModal, setShowImageModal] = useState(false);
   //const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [commentData] = useState([]);
@@ -45,28 +43,16 @@ function MainPage() {
   const location = useLocation();
   const username = new URLSearchParams(location.search).get("username");
   console.log("USERNAME", username);
+
+  
   
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const[currentIndex, setCurrentIndex] = useState(recipes.length > 0 ? recipes.length - 1 : 0);
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
+  
 
-  const [likedComments, setLikedComments] = useState(() => {
-    const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
-    return storedLikedComments || {};
-  });
-
-  useEffect(() => {
-    localStorage.setItem("likedComments", JSON.stringify(likedComments));
-  }, [likedComments]);
-
-  const handleLikeClick = (commentId) => {
-    setLikedComments(prevLikedComments => ({
-      ...prevLikedComments,
-      [commentId]: !prevLikedComments[commentId]
-    }));
-  };
   /*const handleEmojiClick = (emoji) => {
     const emojiString = emoji.unified;
     setComment(comment + emojiString); // Update the comment state with the selected emoji'
@@ -83,57 +69,7 @@ function MainPage() {
     setIsPickerOpen(!isPickerOpen); // Toggle the state to open/close the picker
   };
   
-  const handleDeleteComment = async (content) => {
-    try {
-      // Find the index of the comment with the specified content
-      const index = comments.findIndex(comment => comment.content === content);
-      if (index === -1) {
-        throw new Error('Comment not found');
-      }
   
-      // Get the comment object to delete
-      const commentToDelete = comments[index];
-  
-      // Send a delete request to the server
-      const response = await fetch(`http://localhost:3001/comments/${commentToDelete._id}`, {
-        method: 'DELETE'
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete comment');
-      }
-  
-      // Filter out the deleted comment from the comments state
-      const updatedComments = comments.filter(comment => comment.content !== content);
-      setComments(updatedComments);
-    } catch (error) {
-      console.error('Error deleting the comment:', error);
-    }
-  };
-  
-  
-  
-
-  // const handleDeleteComment = async (commentId) => {
-  //   try {
-      
-  //     commentId = commentId.substring(0, commentId.length - 1)+"+00:00";
-  //     const response = await fetch(`http://localhost:3001/comments?createdAt=${commentId}`, {
-  //       method: 'DELETE'
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error('Failed to delete comment');
-  //     }
-  //     // Filter out the deleted comment from the comments state
-  //     const updatedComments = comments.filter(comment => comment.createdAt == commentId);
-  //   setComments(updatedComments);
-  // } catch (error) {
-  //   console.error('Error deleting comment:', error);
-  // }
-  // };
-
-
-
-
   useEffect(() => {
     setChildRefs(Array(recipes.length).fill(null).map(() => React.createRef()));
   }, [recipes]);
@@ -172,15 +108,52 @@ console.log(childRefs);
       getComments(recipeId); // Fetch comments for the currently selected recipe
     }
   };
-
-
-  const handleCloseImageModal = () => setShowImageModal(false);
-  const handleShowImageModal = () => {
-    setShowImageModal(true);
-  };
   
   const[previousDirection, setPreviousDirection] = useState();
   
+  const [likedComments, setLikedComments] = useState(() => {
+    const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
+    return storedLikedComments || {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem("likedComments", JSON.stringify(likedComments));
+  }, [likedComments]);
+
+  const handleLikeClick = (commentId) => {
+    setLikedComments(prevLikedComments => ({
+      ...prevLikedComments,
+      [commentId]: !prevLikedComments[commentId]
+    }));
+  };
+  
+
+  const handleDeleteComment = async (content) => {
+    try {
+      // Find the index of the comment with the specified content
+      const index = comments.findIndex(comment => comment.content === content);
+      if (index === -1) {
+        throw new Error('Comment not found');
+      }
+  
+      // Get the comment object to delete
+      const commentToDelete = comments[index];
+  
+      // Send a delete request to the server
+      const response = await fetch(`http://localhost:3001/comments/${commentToDelete._id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete comment');
+      }
+  
+      // Filter out the deleted comment from the comments state
+      const updatedComments = comments.filter(comment => comment.content !== content);
+      setComments(updatedComments);
+    } catch (error) {
+      console.error('Error deleting the comment:', error);
+    }
+  };
 
   /*const handleCommentChange = (event) => {
     setComment(event.target.value);
@@ -216,7 +189,7 @@ console.log(childRefs);
     }
   };
   
-
+  
   
 
   const updateCurrentIndex = (val) => {
@@ -240,7 +213,7 @@ console.log(childRefs);
   const outOfFrame = (recipe, index) => {
     console.log(recipe + ' left screen')
   }
-  const getComments = async (recipeId) => {
+  /*const getComments = async (recipeId) => {
     try{
       const response = await fetch(`http://localhost:3001/comments?recipeId=${recipeId}`);
       if(!response.ok){
@@ -254,21 +227,51 @@ console.log(childRefs);
       setComments([]);
     }
 
+  };*/
+  const getComments = async (recipeId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/comments?recipeId=${recipeId}`);
+      if (!response.ok) {
+        throw new Error('Failed to get comments');
+      }
+      const data = await response.json();
+      // Assuming the image paths are stored under the key 'imagePath' in your comment data
+      const commentsWithData = data.map(comment => {
+        return {
+          ...comment,
+          imagePath: `http://localhost:3001/${comment.imagePath}`,
+          username: comment.username
+         
+        };
+      });
+      setComments(commentsWithData);
+    } catch (error) {
+      console.error('Error with comments: ', error);
+      setComments([]);
+    }
   };
+  
+  
   const handleCommentSubmit = async (event, recipeId) => {
     event.preventDefault();
     try {
+      /*const commentData = new FormData();
+      commentData.append("content", newCommentText);
+      commentData.append("username", username);
+      commentData.append("recipeId", recipeId);
+      commentData.append("image", imageData);*/
       const response = await fetch('http://localhost:3001/comments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
+       body: JSON.stringify({ 
           content: newCommentText,
           username: username,
           recipeId: recipeId,
-          // imageData: newImageData
+          imageData: imageData
         })
+        //body: commentData,
       });
       if (!response.ok) {
         throw new Error('Failed to add comment');
@@ -276,18 +279,41 @@ console.log(childRefs);
       const newComment = await response.json();
       setComments([...comments, newComment]);
       setNewCommentText(''); // Clear input field after submission
+      setImageData(null);
     } catch (error) {
       console.error('Error adding comment:', error);
     }
   };
+
+  
   const handleImageUpload = (files) => {
-    const file = files[0]; 
+    /*const file = files[0]; 
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    console.log(reader.result);
     reader.onloadend = () => {
-      // setImageData(reader.result);
+      if(reader.result){
+        setImageData(reader.result);
+      }
+     
+    };*/
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setImageData(event.target.result);
     };
+
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
+    };
+
+    reader.readAsDataURL(file);
 };
+useEffect(() => {
+  console.log('Image Data:', imageData);
+}, [imageData]);
+
 
   const swipe = async (dir) => {
     console.log("SWIPE: RECIPES LENGTH", recipes.length);
@@ -368,7 +394,6 @@ console.log(childRefs);
               </Button>
               </div>
             </Card>
-            &nbsp;
             <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowModal}>
             See Recipe
             </button>
@@ -376,7 +401,7 @@ console.log(childRefs);
           <Modal.Header className="modal-bg" closeButton>
             <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="modal-bg">
+          <Modal.Body  className="modal-bg">
           <div style={{ textAlign: "center" }}>
           <img variant="top" textAlign="center" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
           </div>
@@ -394,12 +419,9 @@ console.log(childRefs);
 
           </div>
           <div className="comment-section">
-        
-            <div>
-            <ul>
-            <h2>Comments</h2>
-            </ul>
-            
+          
+          <h2>Comments </h2>
+
                 <ul>
                   {comments && comments.map((comment,index) => (
                     <div key={comment.id} className="comment">
@@ -407,54 +429,57 @@ console.log(childRefs);
                       <img src={"./files/profile.png"} width={20} height={20} alt="Avatar" />
                       <span className="username">{comment.username}</span>
                       <span className="timestamp">{comment.timestamp}</span>
-                    </div>
-                    {comment.imageData && (
-                    <img src={comment.imageData} alt="Uploaded Image" style={{ width: "200px", height: "auto" }} />
-                    )}
-                    <div className="comment-content">{comment.content}</div>
-                    <div className="comment-actions">
-                      {/* Add reply, like, and delete buttons */}
+                      </div> 
+                      <div className="comment-content">{comment.content}</div>
+                      {comment.imageData && (
+                        <img src={comment.imageData} alt="Uploaded Image "  style={{ width: "200px", height: "auto" }}/>
+                      )}
+                      {/* If imageData is an object with a URL property */}
+                      {comment.imageData && typeof comment.imageData === 'object' && comment.imageData.url && (
+                        <img src={comment.imageData.url} alt="Uploaded Image" style={{ width: "200px", height: "auto" }} />
+                      )}
+                      
+                     
+                                  
                    
-                      <button
+                    
+                      <div className="comment-actions">
+                      {/* Add reply, like, and delete buttons */}
+
+          <button
             onClick={() => handleLikeClick(index)}
-            className={likedComments[index] ? "like-button liked" : "like-button"}>
+            className={likedComments[index] ? "like-button liked" : "like-button"}
+          >
             Like
           </button>
-                      <button className="comment-btn">Delete</button>
+                      <button className="comment-btn" onClick={() => handleDeleteComment(comment.content)}>Delete</button>
                     </div>
                   </div>
                   ))}
                 </ul>
-             
-        </div>
-            
-
-             
+              
             </div>
             <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
                   <input
-                    type="text" 
+                    type="text"
                     value={newCommentText}
                     onChange={(e) => setNewCommentText(e.target.value)}
-                    placeholder="Add a new comment" 
+                    placeholder="Add a new comment"
                   />
                   <input
-                    type="file" 
+                    type="file"
                     onChange={(e) => handleImageUpload(e.target.files)}
                   />
-                  
                   <button type="submit" className="button-bg">Add Comment</button>
-                </form>
-
+                </form>     
+            
           </Modal.Body>
           <Modal.Footer className="modal-bg">
-            <Button className="button-bg" variant="secondary" onClick={handleCloseModal}>
+            <Button variant="secondary" onClick={handleCloseModal} className="button-bg">
               Close
             </Button>
           </Modal.Footer>
         </Modal>
-         
-    
           </TinderCard>
         )}
        
@@ -469,5 +494,7 @@ console.log(childRefs);
     </div>
   )
 }
+
+
 
 export default MainPage;
