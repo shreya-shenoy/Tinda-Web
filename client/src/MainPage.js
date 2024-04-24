@@ -339,7 +339,7 @@ useEffect(() => {
     <div className = 'background' style={{ textAlign:'center'}}>
       <div className = "profileicon">
       
-      <Link to="/ProfilePage">
+      <Link to={`/ProfilePage?username=${username}`}>
         <button>
           <img src='./files/profileicon.png' width={50} height={50} alt="Profile Icon" />
         </button>
