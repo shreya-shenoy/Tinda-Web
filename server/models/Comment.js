@@ -17,7 +17,13 @@ const commentSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+
+  imageData:{
+    type: Buffer,
+    required: false
   }
+  
 });
 
 // Create the Comment model

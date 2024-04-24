@@ -167,7 +167,7 @@ console.log(childRefs);
   const outOfFrame = (recipe, index) => {
     console.log(recipe + ' left screen')
   }
-  const getComments = async (recipeId) => {
+  /*const getComments = async (recipeId) => {
     try{
       const response = await fetch(`http://localhost:3001/comments?recipeId=${recipeId}`);
       if(!response.ok){
@@ -181,21 +181,49 @@ console.log(childRefs);
       setComments([]);
     }
 
+  };*/
+  const getComments = async (recipeId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/comments?recipeId=${recipeId}`);
+      if (!response.ok) {
+        throw new Error('Failed to get comments');
+      }
+      const data = await response.json();
+      // Assuming the image paths are stored under the key 'imagePath' in your comment data
+      const commentsWithData = data.map(comment => {
+        return {
+          ...comment,
+          imagePath: `http://localhost:3001/${comment.imagePath}` // Assuming the path is relative to your server
+        };
+      });
+      setComments(commentsWithData);
+    } catch (error) {
+      console.error('Error with comments: ', error);
+      setComments([]);
+    }
   };
+  
+  
   const handleCommentSubmit = async (event, recipeId) => {
     event.preventDefault();
     try {
+      /*const commentData = new FormData();
+      commentData.append("content", newCommentText);
+      commentData.append("username", username);
+      commentData.append("recipeId", recipeId);
+      commentData.append("image", imageData);*/
       const response = await fetch('http://localhost:3001/comments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
+       body: JSON.stringify({ 
           content: newCommentText,
           username: username,
           recipeId: recipeId,
           imageData: imageData
         })
+        //body: commentData,
       });
       if (!response.ok) {
         throw new Error('Failed to add comment');
@@ -208,13 +236,33 @@ console.log(childRefs);
     }
   };
   const handleImageUpload = (files) => {
-    const file = files[0]; 
+    /*const file = files[0]; 
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    console.log(reader.result);
     reader.onloadend = () => {
-      setImageData(reader.result);
+      if(reader.result){
+        setImageData(reader.result);
+      }
+     
+    };*/
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setImageData(event.target.result);
     };
+
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
+    };
+
+    reader.readAsDataURL(file);
 };
+useEffect(() => {
+  console.log('Image Data:', imageData);
+}, [imageData]);
+
 
   const swipe = async (dir) => {
     console.log("SWIPE: RECIPES LENGTH", recipes.length);
@@ -332,10 +380,15 @@ console.log(childRefs);
                       <img src={"./files/profile.png"} width={20} height={20} alt="Avatar" />
                       <span className="username">{comment.username}</span>
                       <span className="timestamp">{comment.timestamp}</span>
-                    </div>
-                    {comment.imageData && (
-                    <img src={comment.imageData} alt="Uploaded Image" />
-                    )}
+                      {comment.imageData && typeof comment.imageData === 'string' && (
+                        <img src={comment.imageData} alt="Uploaded Image" />
+                      )}
+                      {/* If imageData is an object with a URL property */}
+                      {comment.imageData && typeof comment.imageData === 'object' && comment.imageData.url && (
+                        <img src={comment.imageData.url} alt="Uploaded Image" />
+                      )}
+                                    </div>
+                   
                     <div className="comment-content">{comment.content}</div>
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}

@@ -24,7 +24,6 @@ function Login() {
             setLoginError("Email and password are required");
             return;
         }
-
         
         axios.post("http://localhost:3001/login", { email, password })
         .then(result => {
