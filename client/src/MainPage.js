@@ -53,6 +53,24 @@ function MainPage() {
   const currentIndexRef = useRef(currentIndex);
 
 
+  const [likedComments, setLikedComments] = useState(() => {
+    const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
+    return storedLikedComments || {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem("likedComments", JSON.stringify(likedComments));
+  }, [likedComments]);
+
+  const handleLikeClick = (commentId) => {
+    setLikedComments(prevLikedComments => ({
+      ...prevLikedComments,
+      [commentId]: !prevLikedComments[commentId]
+    }));
+  };
+  
+
+
 const [image,setImage] = useState("");
 
   function covertToBase64(e){
@@ -100,7 +118,25 @@ const [image,setImage] = useState("");
     setIsPickerOpen(!isPickerOpen); // Toggle the state to open/close the picker
   };
   
-  
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/comments/${commentId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete comment');
+      }
+      // Filter out the deleted comment from the comments state
+      const updatedComments = comments.filter(comment => comment.id !== commentId);
+    setComments(updatedComments);
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+  }
+  };
+
+
+
+
   useEffect(() => {
     setChildRefs(Array(recipes.length).fill(null).map(() => React.createRef()));
   }, [recipes]);
@@ -415,8 +451,14 @@ console.log(childRefs);
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
                       <button>Reply</button>
-                      <button>Like</button>
-                      <button>Delete</button>
+                      {/* <p>{comment.text}</p> */}
+          <button
+            onClick={() => handleLikeClick(comment.id)}
+            className={likedComments[comment.id] ? "like-button liked" : "like-button"}
+          >
+            Like  
+          </button>
+                      <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
                     </div>
                   </div>
                   ))}

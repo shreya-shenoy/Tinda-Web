@@ -212,3 +212,16 @@ margin-right: 10px; /* Add space between action buttons */
 .text-color{
   color: rgb(23,36,78);
 }
+
+.like-button {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.liked {
+  background-color: blue;
+  color: white;
+}
