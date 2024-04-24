@@ -115,8 +115,8 @@ app.get('/comments', async (req, res) => {
   // Post comment
 app.post('/comments', async (req, res) => {
     try {
-      const { content, username, recipeId } = req.body;
-      const newComment = new Comment({ content, username, recipeId });
+      const { content, username, recipeId, imageData } = req.body;
+      const newComment = new Comment({ content, username, recipeId, imageData });
       await newComment.save();
       res.status(201).json(newComment);
     } catch (error) {
