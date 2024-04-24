@@ -33,6 +33,7 @@
 
 .recipeContainer{
   padding:0;
+
   /* width: 300px;
   height: 400px; */
 }
@@ -76,6 +77,7 @@
   height: 50%; */
   max-height: 300px; /* Set a maximum height for the scroll box */
   overflow-y: auto; 
+ 
 }
 
 .comment-input-container {
@@ -226,4 +228,15 @@ margin-right: 10px; /* Add space between action buttons */
 .liked {
   background-color: blue;
   color: white;
+}
+
+.see-recipe{
+  background-color: rgb(253, 220, 177);
+}
+.button-bg{
+  background-color: rgb(239, 153, 42);
+  border: 0px;
+  color: white;
+  border-radius: 10px;
+  font-size: 15px;
 }

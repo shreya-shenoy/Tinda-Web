@@ -251,7 +251,7 @@ console.log(childRefs);
     }
   };
   
-  
+
   
 
   const updateCurrentIndex = (val) => {
@@ -413,7 +413,7 @@ console.log(childRefs);
             </button>
 
                 
-
+              
             <Modal show={showImageModal} onHide={handleCloseImageModal}>
           <Modal.Header closeButton>
             <Modal.Title>{recipes[currentIndex].recipe.label} Images</Modal.Title>
@@ -441,11 +441,12 @@ console.log(childRefs);
           </Modal.Footer>
           </Modal>
 
-        <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
+          <div className="see-recipe">
+          <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header className="see-recipe" closeButton>
+            <Modal.Title >{recipes[currentIndex].recipe.label}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="see-recipe">
           <div style={{ textAlign: "center" }}>
           <img variant="top" textAlign="center" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
           </div>
@@ -484,7 +485,7 @@ console.log(childRefs);
                     </div>
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
-                      <button className="like-button">Reply</button>
+                      {/* <button className="like-button">Reply</button> */}
                       {/* <p>{comment.text}</p> */}
           <button
             onClick={() => handleLikeClick(index)}
@@ -515,16 +516,18 @@ console.log(childRefs);
                     type="file"
                     onChange={(e) => handleImageUpload(e.target.files)}
                   /> */}
-                  <button type="submit">Add Comment</button>
+                  <button type="submit" className= "button-bg">Add Comment</button>
                 </form>
             
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+          <Modal.Footer className="see-recipe" >
+            <Button className= "button-bg" variant="secondary" onClick={handleCloseModal}>
               Close
             </Button>
           </Modal.Footer>
         </Modal>
+          </div>
+    
           </TinderCard>
         )}
        
