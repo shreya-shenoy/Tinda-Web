@@ -72,8 +72,10 @@
 }
 
 .comment-section {
-  width: 100%;
-  height: 50%;
+  /* width: 100%;
+  height: 50%; */
+  max-height: 300px; /* Set a maximum height for the scroll box */
+  overflow-y: auto; 
 }
 
 .comment-input-container {

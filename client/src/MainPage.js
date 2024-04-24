@@ -118,21 +118,53 @@ const [image,setImage] = useState("");
     setIsPickerOpen(!isPickerOpen); // Toggle the state to open/close the picker
   };
   
-  const handleDeleteComment = async (commentId) => {
+  const handleDeleteComment = async (content) => {
     try {
-      const response = await fetch(`http://localhost:3001/comments/${commentId}`, {
+      // Find the index of the comment with the specified content
+      const index = comments.findIndex(comment => comment.content === content);
+      if (index === -1) {
+        throw new Error('Comment not found');
+      }
+  
+      // Get the comment object to delete
+      const commentToDelete = comments[index];
+  
+      // Send a delete request to the server
+      const response = await fetch(`http://localhost:3001/comments/${commentToDelete._id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
         throw new Error('Failed to delete comment');
       }
+  
       // Filter out the deleted comment from the comments state
-      const updatedComments = comments.filter(comment => comment.id !== commentId);
-    setComments(updatedComments);
-  } catch (error) {
-    console.error('Error deleting comment:', error);
-  }
+      const updatedComments = comments.filter(comment => comment.content !== content);
+      setComments(updatedComments);
+    } catch (error) {
+      console.error('Error deleting the comment:', error);
+    }
   };
+  
+  
+  
+
+  // const handleDeleteComment = async (commentId) => {
+  //   try {
+      
+  //     commentId = commentId.substring(0, commentId.length - 1)+"+00:00";
+  //     const response = await fetch(`http://localhost:3001/comments?createdAt=${commentId}`, {
+  //       method: 'DELETE'
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Failed to delete comment');
+  //     }
+  //     // Filter out the deleted comment from the comments state
+  //     const updatedComments = comments.filter(comment => comment.createdAt == commentId);
+  //   setComments(updatedComments);
+  // } catch (error) {
+  //   console.error('Error deleting comment:', error);
+  // }
+  // };
 
 
 
@@ -447,23 +479,32 @@ console.log(childRefs);
                     {/* {comment.imageData && (
                     <img src={comment.imageData} alt="Uploaded Image" />
                     )} */}
-                    <div className="comment-content">{comment.content}</div>
+                    <div className="comment-content">{comment.content}
+                   
+                    </div>
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
-                      <button>Reply</button>
+                      <button className="like-button">Reply</button>
                       {/* <p>{comment.text}</p> */}
           <button
-            onClick={() => handleLikeClick(comment.id)}
-            className={likedComments[comment.id] ? "like-button liked" : "like-button"}
+            onClick={() => handleLikeClick(index)}
+            className={likedComments[index] ? "like-button liked" : "like-button"}
           >
-            Like  
+            Like
           </button>
-                      <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                      <button  className="like-button" onClick={() => handleDeleteComment(comment.content)}>Delete</button>
                     </div>
                   </div>
                   ))}
                 </ul>
-                <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
+             
+
+        </div>
+            
+           
+             
+            </div>
+            <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
                   <input
                     type="text"
                     value={newCommentText}
@@ -476,12 +517,6 @@ console.log(childRefs);
                   /> */}
                   <button type="submit">Add Comment</button>
                 </form>
-
-        </div>
-            
-           
-             
-            </div>
             
           </Modal.Body>
           <Modal.Footer>
