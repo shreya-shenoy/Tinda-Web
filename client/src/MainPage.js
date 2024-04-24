@@ -302,12 +302,14 @@ console.log(childRefs);
 
     reader.onload = (event) => {
       setImageData(event.target.result);
+
     };
 
     reader.onerror = (error) => {
       console.error('Error reading file:', error);
     };
 
+>>>>>>> main
     reader.readAsDataURL(file);
 };
 useEffect(() => {
@@ -398,10 +400,10 @@ useEffect(() => {
             See Recipe
             </button>
         <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
+          <Modal.Header className="modal-bg" closeButton>
             <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body  className="modal-bg">
           <div style={{ textAlign: "center" }}>
           <img variant="top" textAlign="center" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
           </div>
@@ -420,8 +422,6 @@ useEffect(() => {
           </div>
           <div className="comment-section">
           
-            <div>
-          
           <h2>Comments </h2>
 
                 <ul>
@@ -434,6 +434,7 @@ useEffect(() => {
                       </div> 
                       <div className="comment-content">{comment.content}</div>
                       {comment.imageData && (
+
                         <img src={comment.imageData} width={250} height={200} alt="Uploaded Image" />
                       )}
                       {/* If imageData is an object with a URL property */}
@@ -447,20 +448,21 @@ useEffect(() => {
                     
                       <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
-                      <button className="like-button">Reply</button>
-                      {/* <p>{comment.text}</p> */}
+
           <button
             onClick={() => handleLikeClick(index)}
             className={likedComments[index] ? "like-button liked" : "like-button"}
           >
             Like
           </button>
-                      <button  className="like-button" onClick={() => handleDeleteComment(comment.content)}>Delete</button>
+                      <button className="comment-btn" onClick={() => handleDeleteComment(comment.content)}>Delete</button>
                     </div>
                   </div>
                   ))}
                 </ul>
-                <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
+
+            <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
+
                   <input
                     type="text"
                     value={newCommentText}
@@ -471,7 +473,8 @@ useEffect(() => {
                     type="file"
                     onChange={(e) => handleImageUpload(e.target.files)}
                   />
-                  <button type="submit">Add Comment</button>
+
+                  <button type="submit" className="button-bg">Add Comment</button>
                 </form>
 
         </div>
@@ -481,8 +484,8 @@ useEffect(() => {
             </div>
             
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+          <Modal.Footer className="modal-bg">
+            <Button variant="secondary" onClick={handleCloseModal} className="button-bg">
               Close
             </Button>
           </Modal.Footer>
