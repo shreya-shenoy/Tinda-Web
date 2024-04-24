@@ -309,7 +309,7 @@ console.log(childRefs);
       console.error('Error reading file:', error);
     };
 
->>>>>>> main
+
     reader.readAsDataURL(file);
 };
 useEffect(() => {
@@ -339,7 +339,7 @@ useEffect(() => {
     <div className = 'background' style={{ textAlign:'center'}}>
       <div className = "profileicon">
       
-      <Link to="/ProfilePage">
+      <Link to={`/ProfilePage?username=${username}`}>
         <button>
           <img src='./files/profileicon.png' width={50} height={50} alt="Profile Icon" />
         </button>
@@ -481,7 +481,7 @@ useEffect(() => {
             
            
              
-            </div>
+            
             
           </Modal.Body>
           <Modal.Footer className="modal-bg">
