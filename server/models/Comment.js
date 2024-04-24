@@ -20,7 +20,7 @@ const commentSchema = new mongoose.Schema({
   },
 
   imageData:{
-    type: Buffer,
+    type: String,
     required: false
   }
   

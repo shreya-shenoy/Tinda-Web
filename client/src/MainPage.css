@@ -129,7 +129,14 @@
   right: 30px; 
 }
 
+
 /* CSS styles for the comment section */
+.comment-image{
+  position: absolute;
+  text-align: right;
+  top: 14px; 
+  right: 30px; 
+}
 .comment-section {
 background-color: #f8f9fa; /* Set background color */
 border: 1px solid #e9ecef; /* Add border */
@@ -161,7 +168,7 @@ margin-right: 10px; /* Add space between avatar and text */
 
 .username {
 font-weight: bold; /* Make username bold */
-margin-right: 10px; /* Add space between username and timestamp */
+ /* Add space between username and timestamp */
 }
 
 .timestamp {
@@ -212,3 +219,4 @@ margin-right: 10px; /* Add space between action buttons */
 .text-color{
   color: rgb(23,36,78);
 }
+
