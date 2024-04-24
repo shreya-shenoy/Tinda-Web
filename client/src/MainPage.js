@@ -309,7 +309,7 @@ console.log(childRefs);
       console.error('Error reading file:', error);
     };
 
->>>>>>> main
+
     reader.readAsDataURL(file);
 };
 useEffect(() => {
@@ -481,7 +481,7 @@ useEffect(() => {
             
            
              
-            </div>
+            
             
           </Modal.Body>
           <Modal.Footer className="modal-bg">
