@@ -417,8 +417,7 @@ console.log(childRefs);
                    
                       <button
             onClick={() => handleLikeClick(index)}
-            className={likedComments[index] ? "like-button liked" : "like-button"}
-          >
+            className={likedComments[index] ? "like-button liked" : "like-button"}>
             Like
           </button>
                       <button className="comment-btn">Delete</button>
@@ -448,15 +447,13 @@ console.log(childRefs);
                 </form>
 
           </Modal.Body>
-          <Modal.Footer className="see-recipe" >
-            <Button className= "button-bg" variant="secondary" onClick={handleCloseModal}>
           <Modal.Footer className="modal-bg">
             <Button className="button-bg" variant="secondary" onClick={handleCloseModal}>
               Close
             </Button>
           </Modal.Footer>
         </Modal>
-          </div>
+         
     
           </TinderCard>
         )}
