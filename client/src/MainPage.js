@@ -52,7 +52,6 @@ function MainPage() {
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
 
-
   const [likedComments, setLikedComments] = useState(() => {
     const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
     return storedLikedComments || {};
@@ -68,40 +67,6 @@ function MainPage() {
       [commentId]: !prevLikedComments[commentId]
     }));
   };
-  
-
-
-const [image,setImage] = useState("");
-
-  function covertToBase64(e){
-    console.log(e);
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload=()=>{
-
-      console.log(reader.result);
-      setImage(reader.result);
-    };
-
-    reader.onerror = error =>{
-      console.log("Error: ", error);
-    };
-  }
- 
-  function uploadImage(){
-    fetch("http://localhost:3001/upload-image",{
-      method: "POST",
-      crossDOmain: true,
-      headers:{
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin":"*",
-      },
-      body: JSON.stringify({
-        base64:image
-      })
-    }).then((res)=> res.json()).then((data)=> console.log(data))
-  }
   /*const handleEmojiClick = (emoji) => {
     const emojiString = emoji.unified;
     setComment(comment + emojiString); // Update the comment state with the selected emoji'
@@ -407,46 +372,11 @@ console.log(childRefs);
             <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowModal}>
             See Recipe
             </button>
-            &nbsp;
-            <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowImageModal}>
-            See Recipe Images
-            </button>
-
-                
-              
-            <Modal show={showImageModal} onHide={handleCloseImageModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{recipes[currentIndex].recipe.label} Images</Modal.Title>
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header className="modal-bg" closeButton>
+            <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <div className="auth-wrapper">
-              <div className="auth-inner" style={{width: "auto"}}>
-                Upload your Recipe!<br/>
-                <input accept="image/*"
-                type="file"
-                onChange={covertToBase64}
-
-                />
-
-                {image==""||image==null?"": <img width = {100} height = {100} src={image}/>}
-                <button onClick={uploadImage}>Upload</button>
-                {/* <button>Upload</button> */}
-              </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseImageModal}>
-              Close
-            </Button>
-          </Modal.Footer>
-          </Modal>
-
-          <div className="see-recipe">
-          <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header className="see-recipe" closeButton>
-            <Modal.Title >{recipes[currentIndex].recipe.label}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="see-recipe">
+          <Modal.Body className="modal-bg">
           <div style={{ textAlign: "center" }}>
           <img variant="top" textAlign="center" src={recipes[currentIndex].recipe.image} width={300} height={300} alt={recipes[currentIndex].recipe.label} />
           </div>
@@ -464,11 +394,12 @@ console.log(childRefs);
 
           </div>
           <div className="comment-section">
-          
+        
             <div>
-          
-          <h2>Comments </h2>
-
+            <ul>
+            <h2>Comments</h2>
+            </ul>
+            
                 <ul>
                   {comments && comments.map((comment,index) => (
                     <div key={comment.id} className="comment">
@@ -477,51 +408,50 @@ console.log(childRefs);
                       <span className="username">{comment.username}</span>
                       <span className="timestamp">{comment.timestamp}</span>
                     </div>
-                    {/* {comment.imageData && (
-                    <img src={comment.imageData} alt="Uploaded Image" />
-                    )} */}
-                    <div className="comment-content">{comment.content}
-                   
-                    </div>
+                    {comment.imageData && (
+                    <img src={comment.imageData} alt="Uploaded Image" style={{ width: "200px", height: "auto" }} />
+                    )}
+                    <div className="comment-content">{comment.content}</div>
                     <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
-                      {/* <button className="like-button">Reply</button> */}
-                      {/* <p>{comment.text}</p> */}
-          <button
+                   
+                      <button
             onClick={() => handleLikeClick(index)}
             className={likedComments[index] ? "like-button liked" : "like-button"}
           >
             Like
           </button>
-                      <button  className="like-button" onClick={() => handleDeleteComment(comment.content)}>Delete</button>
+                      <button className="comment-btn">Delete</button>
                     </div>
                   </div>
                   ))}
                 </ul>
              
-
         </div>
             
-           
+
              
             </div>
             <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
                   <input
-                    type="text"
+                    type="text" 
                     value={newCommentText}
                     onChange={(e) => setNewCommentText(e.target.value)}
-                    placeholder="Add a new comment"
+                    placeholder="Add a new comment" 
                   />
-                  {/* <input
-                    type="file"
+                  <input
+                    type="file" 
                     onChange={(e) => handleImageUpload(e.target.files)}
-                  /> */}
-                  <button type="submit" className= "button-bg">Add Comment</button>
+                  />
+                  
+                  <button type="submit" className="button-bg">Add Comment</button>
                 </form>
-            
+
           </Modal.Body>
           <Modal.Footer className="see-recipe" >
             <Button className= "button-bg" variant="secondary" onClick={handleCloseModal}>
+          <Modal.Footer className="modal-bg">
+            <Button className="button-bg" variant="secondary" onClick={handleCloseModal}>
               Close
             </Button>
           </Modal.Footer>
