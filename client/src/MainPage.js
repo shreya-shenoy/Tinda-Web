@@ -43,12 +43,15 @@ function MainPage() {
   const location = useLocation();
   const username = new URLSearchParams(location.search).get("username");
   console.log("USERNAME", username);
+
+  
   
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const[currentIndex, setCurrentIndex] = useState(recipes.length > 0 ? recipes.length - 1 : 0);
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
+  
 
   /*const handleEmojiClick = (emoji) => {
     const emojiString = emoji.unified;
@@ -498,5 +501,7 @@ useEffect(() => {
     </div>
   )
 }
+
+
 
 export default MainPage;
