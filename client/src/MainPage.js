@@ -23,7 +23,6 @@ import 'react-comments-section/dist/index.css'
 
 
 
-
 function MainPage() {
   const APP_ID = '8bbd57b4';
   const APP_KEY = '6424d94c5f215da7af69015836e315e8';
@@ -37,7 +36,6 @@ function MainPage() {
   const [imageData, setImageData] = useState(null);
   
   const [showModal, setShowModal] = useState(false);
-  const [showImageModal, setShowImageModal] = useState(false);
   //const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [commentData] = useState([]);
@@ -52,56 +50,6 @@ function MainPage() {
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
 
-
-  const [likedComments, setLikedComments] = useState(() => {
-    const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
-    return storedLikedComments || {};
-  });
-
-  useEffect(() => {
-    localStorage.setItem("likedComments", JSON.stringify(likedComments));
-  }, [likedComments]);
-
-  const handleLikeClick = (commentId) => {
-    setLikedComments(prevLikedComments => ({
-      ...prevLikedComments,
-      [commentId]: !prevLikedComments[commentId]
-    }));
-  };
-  
-
-
-const [image,setImage] = useState("");
-
-  function covertToBase64(e){
-    console.log(e);
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload=()=>{
-
-      console.log(reader.result);
-      setImage(reader.result);
-    };
-
-    reader.onerror = error =>{
-      console.log("Error: ", error);
-    };
-  }
- 
-  function uploadImage(){
-    fetch("http://localhost:3001/upload-image",{
-      method: "POST",
-      crossDOmain: true,
-      headers:{
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin":"*",
-      },
-      body: JSON.stringify({
-        base64:image
-      })
-    }).then((res)=> res.json()).then((data)=> console.log(data))
-  }
   /*const handleEmojiClick = (emoji) => {
     const emojiString = emoji.unified;
     setComment(comment + emojiString); // Update the comment state with the selected emoji'
@@ -118,57 +66,7 @@ const [image,setImage] = useState("");
     setIsPickerOpen(!isPickerOpen); // Toggle the state to open/close the picker
   };
   
-  const handleDeleteComment = async (content) => {
-    try {
-      // Find the index of the comment with the specified content
-      const index = comments.findIndex(comment => comment.content === content);
-      if (index === -1) {
-        throw new Error('Comment not found');
-      }
   
-      // Get the comment object to delete
-      const commentToDelete = comments[index];
-  
-      // Send a delete request to the server
-      const response = await fetch(`http://localhost:3001/comments/${commentToDelete._id}`, {
-        method: 'DELETE'
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete comment');
-      }
-  
-      // Filter out the deleted comment from the comments state
-      const updatedComments = comments.filter(comment => comment.content !== content);
-      setComments(updatedComments);
-    } catch (error) {
-      console.error('Error deleting the comment:', error);
-    }
-  };
-  
-  
-  
-
-  // const handleDeleteComment = async (commentId) => {
-  //   try {
-      
-  //     commentId = commentId.substring(0, commentId.length - 1)+"+00:00";
-  //     const response = await fetch(`http://localhost:3001/comments?createdAt=${commentId}`, {
-  //       method: 'DELETE'
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error('Failed to delete comment');
-  //     }
-  //     // Filter out the deleted comment from the comments state
-  //     const updatedComments = comments.filter(comment => comment.createdAt == commentId);
-  //   setComments(updatedComments);
-  // } catch (error) {
-  //   console.error('Error deleting comment:', error);
-  // }
-  // };
-
-
-
-
   useEffect(() => {
     setChildRefs(Array(recipes.length).fill(null).map(() => React.createRef()));
   }, [recipes]);
@@ -207,15 +105,52 @@ console.log(childRefs);
       getComments(recipeId); // Fetch comments for the currently selected recipe
     }
   };
-
-
-  const handleCloseImageModal = () => setShowImageModal(false);
-  const handleShowImageModal = () => {
-    setShowImageModal(true);
-  };
   
   const[previousDirection, setPreviousDirection] = useState();
   
+  const [likedComments, setLikedComments] = useState(() => {
+    const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
+    return storedLikedComments || {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem("likedComments", JSON.stringify(likedComments));
+  }, [likedComments]);
+
+  const handleLikeClick = (commentId) => {
+    setLikedComments(prevLikedComments => ({
+      ...prevLikedComments,
+      [commentId]: !prevLikedComments[commentId]
+    }));
+  };
+  
+
+  const handleDeleteComment = async (content) => {
+    try {
+      // Find the index of the comment with the specified content
+      const index = comments.findIndex(comment => comment.content === content);
+      if (index === -1) {
+        throw new Error('Comment not found');
+      }
+  
+      // Get the comment object to delete
+      const commentToDelete = comments[index];
+  
+      // Send a delete request to the server
+      const response = await fetch(`http://localhost:3001/comments/${commentToDelete._id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete comment');
+      }
+  
+      // Filter out the deleted comment from the comments state
+      const updatedComments = comments.filter(comment => comment.content !== content);
+      setComments(updatedComments);
+    } catch (error) {
+      console.error('Error deleting the comment:', error);
+    }
+  };
 
   /*const handleCommentChange = (event) => {
     setComment(event.target.value);
@@ -331,7 +266,7 @@ console.log(childRefs);
           content: newCommentText,
           username: username,
           recipeId: recipeId,
-          // imageData: newImageData
+          imageData: imageData
         })
         //body: commentData,
       });
@@ -456,44 +391,9 @@ useEffect(() => {
               </Button>
               </div>
             </Card>
-            &nbsp;
             <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowModal}>
             See Recipe
             </button>
-            &nbsp;
-            <button type="button" className="btn btn-success w-100 rounded-0" onClick={handleShowImageModal}>
-            See Recipe Images
-            </button>
-
-                
-
-            <Modal show={showImageModal} onHide={handleCloseImageModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{recipes[currentIndex].recipe.label} Images</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="auth-wrapper">
-              <div className="auth-inner" style={{width: "auto"}}>
-                Upload your Recipe!<br/>
-                <input accept="image/*"
-                type="file"
-                onChange={covertToBase64}
-
-                />
-
-                {image==""||image==null?"": <img width = {100} height = {100} src={image}/>}
-                <button onClick={uploadImage}>Upload</button>
-                {/* <button>Upload</button> */}
-              </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseImageModal}>
-              Close
-            </Button>
-          </Modal.Footer>
-          </Modal>
-
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>{recipes[currentIndex].recipe.label}</Modal.Title>
@@ -542,7 +442,7 @@ useEffect(() => {
                                   
                    
                     
-                    <div className="comment-actions">
+                      <div className="comment-actions">
                       {/* Add reply, like, and delete buttons */}
                       <button className="like-button">Reply</button>
                       {/* <p>{comment.text}</p> */}
@@ -557,26 +457,25 @@ useEffect(() => {
                   </div>
                   ))}
                 </ul>
-             
-
-        </div>
-            
-           
-             
-            </div>
-            <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
+                <form onSubmit={(event) => handleCommentSubmit(event, recipes[currentIndex].recipe.label)}>
                   <input
                     type="text"
                     value={newCommentText}
                     onChange={(e) => setNewCommentText(e.target.value)}
                     placeholder="Add a new comment"
                   />
-                  {/* <input
+                  <input
                     type="file"
                     onChange={(e) => handleImageUpload(e.target.files)}
-                  /> */}
+                  />
                   <button type="submit">Add Comment</button>
                 </form>
+
+        </div>
+            
+           
+             
+            </div>
             
           </Modal.Body>
           <Modal.Footer>
