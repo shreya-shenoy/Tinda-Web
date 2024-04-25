@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import EditProfileButton from './EditProfileButton'; // Import the EditProfileButton component
 import './ProfilePage.css';
 
+// Function for the profile page
 const ProfilePage = () => {
   const [username, setUsername] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -15,6 +16,7 @@ const ProfilePage = () => {
     setUsername(searchParams.get("username"));
   }, [location.search]);
 
+  // 
   const handleEditButtonClick = () => {
     setIsEditing(true);
     setNewUsername(username);

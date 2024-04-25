@@ -1,3 +1,5 @@
+
+//import required libraries to implement in the mainpage
 import React, {useState, useRef, useMemo, useEffect} from "react";
 
 import TinderCard from "react-tinder-card";
@@ -24,19 +26,21 @@ import 'react-comments-section/dist/index.css'
 
 
 function MainPage() {
+
+  // The API key information
   const APP_ID = '8bbd57b4';
   const APP_KEY = '6424d94c5f215da7af69015836e315e8';
 
+
+  // defining variables to call throughtout the file
   const [recipes, setRecipes] = useState([])
   const [childRefs, setChildRefs] = useState([]);
   const[search, setSearch] = useState("");
   const[query, setQuery] = useState('pasta');
-  //const childRefs = useRef([]);
   const [newCommentText, setNewCommentText] = useState('');
   const [imageData, setImageData] = useState(null);
   
   const [showModal, setShowModal] = useState(false);
-  //const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [commentData] = useState([]);
   const [recipeLength, setRecipeLength] = useState(0);
@@ -44,46 +48,25 @@ function MainPage() {
   const username = new URLSearchParams(location.search).get("username");
   console.log("USERNAME", username);
 
-  
-  
-  const [chosenEmoji, setChosenEmoji] = useState(null);
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const[currentIndex, setCurrentIndex] = useState(recipes.length > 0 ? recipes.length - 1 : 0);
   console.log(recipes.length, "recipes", recipes)
   const currentIndexRef = useRef(currentIndex);
   
-
-  /*const handleEmojiClick = (emoji) => {
-    const emojiString = emoji.unified;
-    setComment(comment + emojiString); // Update the comment state with the selected emoji'
-    console.log(emojiString);
-    setIsPickerOpen(false); // Close the emoji picker after selecting an emoji
-  };*/
-  
   console.log("RECIPES LENGTH", recipes.length);
-  
-  
-
-  const togglePicker = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    setIsPickerOpen(!isPickerOpen); // Toggle the state to open/close the picker
-  };
   
   
   useEffect(() => {
     setChildRefs(Array(recipes.length).fill(null).map(() => React.createRef()));
   }, [recipes]);
   
+  // connects to the edamam recipe API to fetch recipes and dispaly on the page
   useEffect( () =>{ 
   const getRecipes = async () => {
       const response = await fetch(`https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`)
       const data = await response.json()
       console.log(data);
       setRecipes(data.hits)
-      //setCurrentIndex(data.hits.length - 1);
       setRecipeLength(data.hits.length - 1);
-      //childRefs.current = data.hits.map(() => React.createRef());
-      //console.log("CHILD REFS", childRefs.current);
       };
  
 
@@ -91,35 +74,38 @@ function MainPage() {
   getRecipes();
 }, []);
   
-/*const childRefs = useMemo(
-  () => Array(recipeLength).fill(0).map((i) => React.createRef()), []
-   
-)*/
+
 console.log(childRefs);
 
   
   console.log("currentIndex", currentIndex)
 
+  // creates a modal to display the recipes fetched from the edamam API
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => {
     setShowModal(true);
     if (currentIndex >= 0 && recipes.length > currentIndex && recipes.length > 0) {
-      const recipeId = recipes[currentIndex].recipe.label; // Adjust this if the recipe ID is stored differently
-      getComments(recipeId); // Fetch comments for the currently selected recipe
+      // Adjust this if the recipe ID is stored differently
+      const recipeId = recipes[currentIndex].recipe.label; 
+      // Fetch comments for the currently selected recipe
+      getComments(recipeId); 
     }
   };
   
   const[previousDirection, setPreviousDirection] = useState();
   
+  // gets the liked comments
   const [likedComments, setLikedComments] = useState(() => {
     const storedLikedComments = JSON.parse(localStorage.getItem("likedComments"));
     return storedLikedComments || {};
   });
 
+  // Update local storage when liked comments change 
   useEffect(() => {
     localStorage.setItem("likedComments", JSON.stringify(likedComments));
   }, [likedComments]);
 
+    // Function to handle like button click for comments
   const handleLikeClick = (commentId) => {
     setLikedComments(prevLikedComments => ({
       ...prevLikedComments,
@@ -127,7 +113,7 @@ console.log(childRefs);
     }));
   };
   
-
+ // Function to handle comment deletion
   const handleDeleteComment = async (content) => {
     try {
       // Find the index of the comment with the specified content
@@ -155,17 +141,6 @@ console.log(childRefs);
     }
   };
 
-  /*const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
-
-  const handleSubmitComment = () => {
-    const commentWithEmoji = comment + (chosenEmoji ? chosenEmoji.unified : ''); 
-    console.log("Comment submitted:", commentWithEmoji);
-    setComments([...comments, commentWithEmoji]); 
-    setComment(""); 
-    setChosenEmoji(null); 
-  };*/
   const handleLikeRecipe = async (recipeName) => {
     try {
        // Function to get current user's ID
@@ -191,7 +166,7 @@ console.log(childRefs);
   
   
   
-
+// updates the index
   const updateCurrentIndex = (val) => {
     setCurrentIndex(val)
     currentIndexRef.current = val
@@ -213,29 +188,16 @@ console.log(childRefs);
   const outOfFrame = (recipe, index) => {
     console.log(recipe + ' left screen')
   }
-  /*const getComments = async (recipeId) => {
-    try{
-      const response = await fetch(`http://localhost:3001/comments?recipeId=${recipeId}`);
-      if(!response.ok){
-        throw new Error('Failed to get comments');
-      }
-      const data = await response.json();
-      setComments(data);
-    }
-    catch(error){
-      console.error('Error with comments: ', error);
-      setComments([]);
-    }
-
-  };*/
+  // Function to get the comments from the database
   const getComments = async (recipeId) => {
     try {
       const response = await fetch(`http://localhost:3001/comments?recipeId=${recipeId}`);
       if (!response.ok) {
+        // Error handling
         throw new Error('Failed to get comments');
       }
       const data = await response.json();
-      // Assuming the image paths are stored under the key 'imagePath' in your comment data
+      // getting the comments along with the image data
       const commentsWithData = data.map(comment => {
         return {
           ...comment,
@@ -251,15 +213,11 @@ console.log(childRefs);
     }
   };
   
-  
+  // Function to add a new comment
   const handleCommentSubmit = async (event, recipeId) => {
     event.preventDefault();
     try {
-      /*const commentData = new FormData();
-      commentData.append("content", newCommentText);
-      commentData.append("username", username);
-      commentData.append("recipeId", recipeId);
-      commentData.append("image", imageData);*/
+    // access the database
       const response = await fetch('http://localhost:3001/comments', {
         method: 'POST',
         headers: {
@@ -271,7 +229,6 @@ console.log(childRefs);
           recipeId: recipeId,
           imageData: imageData
         })
-        //body: commentData,
       });
       if (!response.ok) {
         throw new Error('Failed to add comment');
@@ -279,33 +236,25 @@ console.log(childRefs);
       const newComment = await response.json();
       setComments([...comments, newComment]);
       setNewCommentText(''); // Clear input field after submission
-      setImageData(null);
     } catch (error) {
+      // Error handling
       console.error('Error adding comment:', error);
     }
   };
 
-  
+  // Function to uplaod image
   const handleImageUpload = (files) => {
-    /*const file = files[0]; 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    console.log(reader.result);
-    reader.onloadend = () => {
-      if(reader.result){
-        setImageData(reader.result);
-      }
-     
-    };*/
     const file = files[0];
     const reader = new FileReader();
 
     reader.onload = (event) => {
+      // storing image data
       setImageData(event.target.result);
 
     };
 
     reader.onerror = (error) => {
+      // Error handling
       console.error('Error reading file:', error);
     };
 

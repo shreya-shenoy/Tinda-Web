@@ -1,4 +1,4 @@
-//LoginForm.js
+//imports necessary libraries
 import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,10 @@ import axios from "axios";
 import "./LoginForm.css";
 import "./MainPage.css";
 
+// Login form function
 function LoginForm() {
-    const navigate = useNavigate(); // Replace useHistory with useNavigate
+  // Replace useHistory with useNavigate
+    const navigate = useNavigate(); 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [error, setError] = useState("");
   
@@ -20,6 +22,7 @@ function LoginForm() {
         }
       }
       catch (err){
+        // error handling
         setError("Invalid email or password");
         console.error("Login error:", err);
       }
@@ -37,6 +40,7 @@ function LoginForm() {
   
     return (
       <>
+      {/* Sign up page for new users */}
         <p className="title">Sign Up</p>
   
         <form

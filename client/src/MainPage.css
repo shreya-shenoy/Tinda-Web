@@ -1,6 +1,6 @@
-
+/* CSS properties defined for elements */
 .background, html, body{
-  /* background-color: rgb(255, 234, 253); */
+
   height: 100%;
   width: 100%;
   margin: 0;
@@ -33,9 +33,6 @@
 
 .recipeContainer{
   padding:0;
-
-  /* width: 300px;
-  height: 400px; */
 }
 
 .modal {
@@ -73,19 +70,17 @@
 }
 
 .comments-heading {
-  position: fixed; /* or position: sticky; */
-  top: 0; /* or any other value to adjust its vertical position */
-  width: 100%; /* Make it span the full width of its container */
-  z-index: 1; /* Ensure it stays on top of other content */
-  background-color: #ffffff; /* Set background color if needed */
-  /* Add any other styles as needed */
+  position: fixed; 
+  top: 0; 
+  width: 100%; 
+  z-index: 1;
+  background-color: #ffffff; 
+
 }
 
 .comment-section {
-  /* width: 100%;
-  height: 50%; */
   padding-top: 40px; 
-  max-height: 300px; /* Set a maximum height for the scroll box */
+  max-height: 300px; 
   overflow-y: auto; 
 }
 
@@ -145,7 +140,6 @@
 }
 
 
-/* CSS styles for the comment section */
 .comment-image{
   position: absolute;
   text-align: right;
@@ -153,21 +147,20 @@
   right: 30px; 
 }
 .comment-section {
-background-color: #f8f9fa; /* Set background color */
-border: 1px solid #e9ecef; /* Add border */
-border-radius: 8px; /* Add border radius for rounded corners */
-padding: 20px; /* Add padding */
-max-height: 300px; /* Set a maximum height for the scroll box */
+background-color: #f8f9fa; 
+border: 1px solid #e9ecef; 
+border-radius: 8px; 
+max-height: 300px; 
 overflow-y: auto; 
 }
 
-/* CSS styles for individual comments */
+
 .comment {
-margin-bottom: 15px; /* Add space between comments */
-padding: 15px; /* Add padding */
-border: 1px solid #ced4da; /* Add border */
-border-radius: 8px; /* Add border radius for rounded corners */
-background-color: #fff; /* Set background color */
+margin-bottom: 15px; 
+padding: 15px; 
+border: 1px solid #ced4da;
+border-radius: 8px; 
+background-color: #fff; 
 }
 
 .comment-header {
@@ -177,36 +170,34 @@ margin-bottom: 10px;
 }
 
 .comment-header img {
-width: 40px; /* Set width for avatar */
-height: 40px; /* Set height for avatar */
-border-radius: 50%; /* Make avatar round */
-margin-right: 10px; /* Add space between avatar and text */
+width: 40px;
+height: 40px; 
+border-radius: 50%; 
+margin-right: 10px;
 }
 
 .username {
-font-weight: bold; /* Make username bold */
-margin-right: 10px; /* Add space between username and timestamp */
+font-weight: bold;
+margin-right: 10px; 
 }
 
 .timestamp {
-color: #6c757d; /* Set color for timestamp */
+color: #6c757d; 
 }
 
 .comment-content {
-margin-bottom: 10px; /* Add space between content and actions */
+margin-bottom: 10px; 
 }
 
 .comment-actions button {
-margin-right: 10px; /* Add space between action buttons */
+margin-right: 10px;
 }
 
 .wrapper {
   width:420px;
   background: transparent;
-  /* border: 2px solid rgba(255,255,255,.2); */
   backdrop-filter: blur(10px);
   box-shadow: 0 0 10px rgba(0,0,0,.2);
-  /* color: #fff; */
   border-radius: 10px;
   padding: 30px 40px;
 }
@@ -221,7 +212,6 @@ margin-right: 10px; /* Add space between action buttons */
   display: flex;
    justify-content: space-between;
   font-size: 14.5px;
-  /* margin: -15px 0 15px;  */
 }
 
 .forget-password a{
@@ -270,7 +260,7 @@ margin-right: 10px; /* Add space between action buttons */
   color: white;
   border-radius: 5px;
   border: none;
-  width: 150px; /* Adjust the width as needed */
+  width: 150px; 
   height: 40px;
 }
 
@@ -279,7 +269,7 @@ margin-right: 10px; /* Add space between action buttons */
     border-radius: 5px;
     border: none;
     padding: none;
-    width: 75px; /* Adjust the width as needed */
+    width: 75px; 
     height:30px;
   
 }
@@ -289,7 +279,7 @@ margin-right: 10px; /* Add space between action buttons */
   background-color: rgb(198, 198, 201);
   border-radius: 5px;
   border: none;
-  width: 50px; /* Adjust the width as needed */
+  width: 50px; 
   height: 30px;
   padding: 5px 10px;
   cursor: pointer;
