@@ -1,3 +1,4 @@
+// defining variables to use
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
@@ -12,10 +13,10 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json())
 app.use(cors())
 const dbUrl = ATLAS_URI = 'mongodb+srv://shreyas:passcode@tinda.q783xqc.mongodb.net/?retryWrites=true&w=majority&appName=Tinda';
-//mongoose.connect("mongodb://127.0.0.1:27017/employee");
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
+// login request to the server
 app.post("/login", (req, res) => {
     const {email, password} = req.body;
     console.log("Email:", email);
@@ -32,7 +33,7 @@ app.post("/login", (req, res) => {
                     user: {
                         name: user.name,
                         email: user.email
-                        // Add any other user data you want to return
+                       
                     }
                 });
             }else{
@@ -53,41 +54,7 @@ app.post("/register", (req, res) => {
     .catch(err => res.json(err))
 })
 
-/*app.post("/comments", async (req, res) => {
-    try {
-      
-      const { username, content, recipeId } = req.body;
-  
-     
-      const newComment = await CommentModel.create({ username, content, recipeId });
-  
-      
-      res.status(201).json(newComment);
-    } catch (error) {
-      
-      console.error("Error saving comment:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-  
-  
-  app.get("/comments/:recipeId", async (req, res) => {
-    try {
-
-      const { recipeId } = req.params;
-  
-
-      const comments = await CommentModel.find({ recipeId });
-  
-    
-      res.status(200).json(comments);
-    } catch (error) {
-    
-      console.error("Error retrieving comments:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });*/
-
+// like request to server
 app.post("/like", async (req, res) => {
     try {
       const { name, recipeName } = req.body;
@@ -105,17 +72,7 @@ app.post("/like", async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   });
-/*app.get('/comments', async (req, res) => {
-  try {
-    const recipeId = req.query.recipeId;
-    const comments = await Comment.find({ recipeId: recipeId });
 
-    res.json(comments);
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-  });*/
   app.get('/comments', async (req, res) => {
     try {
       const recipeId = req.query.recipeId;
