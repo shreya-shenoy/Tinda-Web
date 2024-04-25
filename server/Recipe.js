@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+// displaying recipe with its title, ingredients and other details
 const Recipe = ({title, calories, image, ingredients}) => {
     return(
         <div className={style.recipe}>

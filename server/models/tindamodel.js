@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// schema for the data
+// Define the schema for the tindamodel
 
 const tindaSchema = new mongoose.Schema({
     id: Number,
