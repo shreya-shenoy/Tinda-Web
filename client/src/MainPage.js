@@ -508,3 +508,143 @@ useEffect(() => {
 
 
 export default MainPage;
+
+// Nandika's filter integration not working-- 
+//this is code from another branch that I was having issues with getting the modal to work with 
+// const App = () => {
+//   const [recipes, setRecipes] = useState([]);
+//   const [filterOptions, setFilterOptions] = useState(false); // State to toggle filter options
+//   const [filter, setFilter] = useState([]); // Change state to an array for multiple selections
+//   const [query, setQuery] = useState("chicken");
+
+//   useEffect(() => {
+//     getRecipes();
+//   }, [query]);
+
+//   const getRecipes = async () => {
+//     const response = await axios.get(`http://localhost:5000/recipes/${query}`);
+//     setRecipes(response.data);
+//   };
+
+//   const handleFilterOptionClick = (option) => {
+//     const newFilter = filter.includes(option)
+//       ? filter.filter((item) => item !== option) // Remove option if already selected
+//       : [...filter, option]; // Add option if not already selected
+//     setFilter(newFilter);
+//   };
+
+//   const handleFilterApply = () => {
+//     const combinedQuery = filter.join(",");
+//     setQuery(combinedQuery);
+//     setFilterOptions(false); // Hide filter options after applying filter
+//   };
+
+//   return (
+//     <div className="App">
+//       <div className="filter-container">
+//         <button className="filter-button" onClick={() => setFilterOptions(!filterOptions)}>
+//           Filters
+//         </button>
+//         {filterOptions && (
+//           <div className="filter-options">
+//             <div className="filter-group">
+//               <p className="filter-group-label">Dietary Restrictions:</p>
+//               <div className="filter-checkboxes">
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="vegan"
+//                     checked={filter.includes("vegan")}
+//                     onChange={() => handleFilterOptionClick("vegan")}
+//                   />
+//                   Vegan
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="vegetarian"
+//                     checked={filter.includes("vegetarian")}
+//                     onChange={() => handleFilterOptionClick("vegetarian")}
+//                   />
+//                   Vegetarian
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="pescetarian"
+//                     checked={filter.includes("pescetarian")}
+//                     onChange={() => handleFilterOptionClick("pescetarian")}
+//                   />
+//                   Pescetarian
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="gluten-free"
+//                     checked={filter.includes("gluten-free")}
+//                     onChange={() => handleFilterOptionClick("gluten-free")}
+//                   />
+//                   Gluten Free
+//                 </label>
+//               </div>
+//             </div>
+//             <div className="filter-group">
+//               <p className="filter-group-label">Cuisine Types:</p>
+//               <div className="filter-checkboxes">
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="asian"
+//                     checked={filter.includes("asian")}
+//                     onChange={() => handleFilterOptionClick("asian")}
+//                   />
+//                   Asian
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="italian"
+//                     checked={filter.includes("italian")}
+//                     onChange={() => handleFilterOptionClick("italian")}
+//                   />
+//                   Italian
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="middle-eastern"
+//                     checked={filter.includes("middle-eastern")}
+//                     onChange={() => handleFilterOptionClick("middle-eastern")}
+//                   />
+//                   Middle Eastern
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     value="american"
+//                     checked={filter.includes("american")}
+//                     onChange={() => handleFilterOptionClick("american")}
+//                   />
+//                   American
+//                 </label>
+//               </div>
+//             </div>
+//             <button className="apply-filter-button" onClick={handleFilterApply}>
+//               Apply Filter
+//             </button>
+//           </div>
+//         )}
+//       </div>
+//       <div className="recipes">
+//         {recipes.map((recipe) => (
+//           <Recipe
+//             key={recipe.recipe.label}
+//             title={recipe.recipe.label}
+//             image={recipe.recipe.image}
+//             ingredients={recipe.recipe.ingredients}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
