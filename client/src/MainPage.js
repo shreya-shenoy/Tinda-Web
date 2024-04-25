@@ -353,6 +353,55 @@ useEffect(() => {
         Filters
       </button>
      
+
+      {/* issues with Modal when integrating filter feature */}
+      {/* <div className='background' style={{ textAlign: 'center' }}>
+        <div className="profileicon">
+          <Link to="/ProfilePage">
+            <button>
+              <img src='./files/profileicon.png' width={50} height={50} alt="Profile Icon" />
+            </button>
+          </Link>
+        </div>
+
+        <div>
+          <button type="button" className="filtertitle" onClick={handleShowFilterModal}>
+            <img src='./files/Filtericons.png' width={50} height={50} alt="Filter Icon" />
+            Filters
+          </button>
+
+          <Modal show={showFilterModal} onHide={handleCloseFilterModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Filters</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <label>
+                <input type="checkbox" value="chicken" />
+                Chicken
+              </label>
+              <br />
+              <label>
+                <input type="checkbox" value="beef" />
+                Beef
+              </label>
+              <br />
+              <label>
+                <input type="checkbox" value="fish" />
+                Fish
+              </label>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseFilterModal}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleCloseFilterModal}>
+                Apply Filters
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      </div> */}
+
       <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Filters</Modal.Title>
